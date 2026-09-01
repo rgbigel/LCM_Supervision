@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workspace Supervision Hub - LCM Fleet Stability & Invariants</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-card: rgba(22, 27, 34, 0.75);
+      --bg-card-hover: rgba(33, 38, 45, 0.85);
+      --border: #30363d;
+      --border-bright: #58a6ff;
+      --text-primary: #f0f6fc;
+      --text-secondary: #8b949e;
+      --text-muted: #6e7681;
+      --accent: #58a6ff;
+      --accent-hover: #79c0ff;
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+      --info: #388bfd;
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', Consolas, monospace;
+      --card-radius: 10px;
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f6f8fa;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.9);
+      --bg-card-hover: #f3f4f6;
+      --border: #d0d7de;
+      --border-bright: #0969da;
+      --text-primary: #1f2328;
+      --text-secondary: #424a53;
+      --text-muted: #59636e;
+      --accent: #0969da;
+      --accent-hover: #0550ae;
+      --success: #1a7f37;
+      --warning: #9a6700;
+      --danger: #cf222e;
+      --info: #0969da;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: #ffffff;
+    }
+
+    .btn-back {
+      font-weight: 700;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-back:hover {
+      background: rgba(88, 166, 255, 0.15);
+    }
+
+    /* Container Layout */
+    .main-container {
+      max-width: 1500px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
+    }
+
+    /* Metric Cards Grid */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: var(--transition);
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    .metric-card:hover, .metric-card.active {
+      border-color: var(--border-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .metric-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .metric-value {
+      font-size: 26px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+    }
+
+    .metric-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Control Panel & Table Toolbar */
+    .toolbar-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .search-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 280px;
+      max-width: 480px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 14px 8px 34px;
+      font-size: 13px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 7px 12px;
+      font-size: 13px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .batch-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(88, 166, 255, 0.08);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(88, 166, 255, 0.25);
+    }
+
+    /* Standard Interactive Table */
+    .table-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      overflow-x: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 12px 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    th:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    th.sorted-asc::after { content: " ▲"; color: var(--accent); }
+    th.sorted-desc::after { content: " ▼"; color: var(--accent); }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-active { background: rgba(63, 185, 80, 0.15); color: var(--success); border: 1px solid rgba(63, 185, 80, 0.3); }
+    .badge-paused { background: rgba(210, 153, 34, 0.15); color: var(--warning); border: 1px solid rgba(210, 153, 34, 0.3); }
+    .badge-stopped { background: rgba(110, 118, 129, 0.15); color: var(--text-muted); border: 1px solid rgba(110, 118, 129, 0.3); }
+    .badge-failing { background: rgba(248, 81, 73, 0.15); color: var(--danger); border: 1px solid rgba(248, 81, 73, 0.3); }
+
+    .badge-domain {
+      background: rgba(88, 166, 255, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(88, 166, 255, 0.25);
+    }
+
+    .count-cell {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .count-error { color: var(--danger); }
+    .count-warn { color: var(--warning); }
+    .count-info { color: var(--info); }
+    .count-total { color: var(--text-primary); font-weight: 700; }
+
+    /* Action Buttons in Row */
+    .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-icon {
+      padding: 4px 8px;
+      font-size: 11px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+    .btn-icon:hover {
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      width: 90%;
+      max-width: 600px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-control {
+      padding: 8px 12px;
+      font-size: 13px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-bright);
+      color: var(--text-primary);
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      display: none;
+      z-index: 2000;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-bar">
+    <div class="brand-section">
+      <a href="javascript:void(0)" class="brand-logo">
+        <span>🛡️</span> Workspace Supervision Hub
+      </a>
+      <span class="badge badge-domain">LCM v4.3.1</span>
+    </div>
+    <div class="nav-actions">
+      <button class="btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Light/Dark Theme">🌓 Theme</button>
+      <button class="btn btn-primary" onclick="openAddModal()">➕ Add Task</button>
+      <a href="../../Workspace_Inventory/docs/CM_CONTROL_HUB.html" class="btn btn-back" title="Return to LCM CM Control Hub">⬅ Back to CM Hub</a>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- Metric Summary Cards -->
+    <section class="metric-grid">
+      <div class="metric-card active" onclick="filterByStatus('All')" id="card-all">
+        <div class="metric-title">Total Tasks <span>📋</span></div>
+        <div class="metric-value" id="val-total-tasks">2</div>
+        <div class="metric-sub">Registered supervision tasks</div>
+      </div>
+      <div class="metric-card" onclick="filterByStatus('Active')" id="card-active">
+        <div class="metric-title">Active <span>🟢</span></div>
+        <div class="metric-value" id="val-active-tasks" style="color: var(--success);">2</div>
+        <div class="metric-sub">Scheduled & monitoring</div>
+      </div>
+      <div class="metric-card" onclick="filterByStatus('Paused')" id="card-paused">
+        <div class="metric-title">Paused <span>🟡</span></div>
+        <div class="metric-value" id="val-paused-tasks" style="color: var(--warning);">0</div>
+        <div class="metric-sub">Temporarily suspended</div>
+      </div>
+      <div class="metric-card" onclick="filterBySeverity('Errors')" id="card-errors">
+        <div class="metric-title">Errors (🔴) <span>⚠️</span></div>
+        <div class="metric-value" id="val-total-errors" style="color: var(--danger);">0</div>
+        <div class="metric-sub">Critical breaches / failures</div>
+      </div>
+      <div class="metric-card" onclick="filterBySeverity('TotalObs')" id="card-obs">
+        <div class="metric-title">Total Observations <span>📊</span></div>
+        <div class="metric-value" id="val-total-obs" style="color: var(--accent);">54</div>
+        <div class="metric-sub">Observed metrics ledger</div>
+      </div>
+    </section>
+
+    <!-- Toolbar & Action Panel -->
+    <section class="toolbar-panel">
+      <div class="toolbar-row">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" id="search-input" placeholder="Search tasks by name, domain, category (!term to exclude)..." oninput="applyFilters()">
+        </div>
+
+        <div class="filter-group">
+          <select class="filter-select" id="domain-select" onchange="applyFilters()">
+            <option value="All">All Domains</option>
+            <option value="HaSSD06">HaSSD06</option>
+            <option value="SystemConfiguration">SystemConfiguration</option>
+          </select>
+
+          <select class="filter-select" id="status-select" onchange="applyFilters()">
+            <option value="All">All Statuses</option>
+            <option value="Active">Active</option>
+            <option value="Paused">Paused</option>
+            <option value="Stopped">Stopped</option>
+            <option value="Failing">Failing</option>
+          </select>
+
+          <button class="btn" onclick="resetFilters()">↺ Reset</button>
+        </div>
+      </div>
+
+      <!-- Batch Selection Toolbar -->
+      <div class="toolbar-row" id="batch-toolbar" style="display: none;">
+        <div class="batch-actions">
+          <span style="font-size: 12px; font-weight: 600;" id="selected-count-label">0 tasks selected</span>
+          <button class="btn btn-icon" onclick="batchAction('Start')">▶ Start Selected</button>
+          <button class="btn btn-icon" onclick="batchAction('Pause')">⏸ Pause Selected</button>
+          <button class="btn btn-icon" onclick="batchAction('Stop')">⏹ Stop Selected</button>
+          <button class="btn btn-icon btn-primary" onclick="batchAction('RunNow')">⚡ Run Selected Now</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standard Interactive Table -->
+    <section class="table-container">
+      <table id="supervision-table">
+        <thead>
+          <tr>
+            <th style="width: 36px; text-align: center;"><input type="checkbox" id="select-all-chk" onchange="toggleSelectAll(this.checked)"></th>
+            <th onclick="sortTable('shortName')">Short Name</th>
+            <th onclick="sortTable('longName')">Full Task Name</th>
+            <th onclick="sortTable('domain')">Domain</th>
+            <th onclick="sortTable('status')">Status</th>
+            <th onclick="sortTable('intervalMinutes')">Interval</th>
+            <th onclick="sortTable('errors')" style="text-align: center;">Errors (🔴)</th>
+            <th onclick="sortTable('warnings')" style="text-align: center;">Warns (🟡)</th>
+            <th onclick="sortTable('info')" style="text-align: center;">Info (🔵)</th>
+            <th onclick="sortTable('total')" style="text-align: center;">Total Obs</th>
+            <th onclick="sortTable('lastRun')">Last Run / Duration</th>
+            <th style="text-align: center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="table-tbody">
+          <!-- Dynamically populated -->
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- Add / Modify Task Modal -->
+  <div class="modal-overlay" id="task-modal" onclick="closeModalOnOverlay(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title" style="font-size: 16px; font-weight: 700;">➕ Register New Supervision Task</h3>
+        <button class="btn-icon" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="task-edit-id">
+        <div class="form-group">
+          <label>Task Short Name (Alias)</label>
+          <input type="text" class="form-control" id="task-input-short" placeholder="e.g. BleSupervision">
+        </div>
+        <div class="form-group">
+          <label>Full Task Name (Descriptive)</label>
+          <input type="text" class="form-control" id="task-input-long" placeholder="e.g. Home Assistant Bluetooth LE Fleet Stability Supervision">
+        </div>
+        <div class="form-group">
+          <label>Domain / Subsystem</label>
+          <input type="text" class="form-control" id="task-input-domain" placeholder="e.g. HaSSD06 or SystemConfiguration">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <input type="text" class="form-control" id="task-input-category" placeholder="e.g. Subsystem Health">
+        </div>
+        <div class="form-group">
+          <label>Interval (Minutes)</label>
+          <input type="number" class="form-control" id="task-input-interval" value="240" min="5">
+        </div>
+        <div class="form-group">
+          <label>Runner Environment</label>
+          <select class="form-control" id="task-input-runner">
+            <option value="python">Python (Python 3.14 / Virtualenv)</option>
+            <option value="powershell">PowerShell (pwsh.exe 7+)</option>
+            <option value="batch">Batch / Command Script</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Script Path (Relative to Workspace_Supervision)</label>
+          <input type="text" class="form-control" id="task-input-path" placeholder="e.g. tasks/bluetooth/BleSupervisionTask.py">
+        </div>
+        <div class="form-group">
+          <label>Description & Purpose</label>
+          <textarea class="form-control" id="task-input-desc" rows="3" placeholder="Brief summary of supervision invariants..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveTaskModal()">Save Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div class="toast" id="toast-msg"></div>
+
+  <script>
+    // Embedded Catalog Initial State
+    let catalogData = {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "lastUpdated": "2026-09-01T11:32:49Z",
+  "tasks": [
+    {
+      "id": "ble-fleet-stability",
+      "shortName": "BleSupervision",
+      "longName": "Home Assistant Bluetooth LE Fleet Stability Supervision",
+      "domain": "HaSSD06",
+      "category": "Subsystem Health",
+      "status": "Active",
+      "intervalMinutes": 240,
+      "runner": "python",
+      "scriptPath": "tasks/bluetooth/BleSupervisionTask.py",
+      "args": [
+        "240"
+      ],
+      "lastRun": "2026-09-01T13:32:09.814623+02:00",
+      "lastDuration": 0.114,
+      "lastStatus": "Healthy",
+      "nextRun": "2026-09-01T15:32:09Z",
+      "observations": {
+        "errors": 0,
+        "warnings": 0,
+        "info": 51,
+        "total": 51
+      },
+      "description": "Monitors 51 dynamic Bluetooth entities for packet collisions, micro-oscillations, and dropouts."
+    },
+    {
+      "id": "system-hardware-invariants",
+      "shortName": "SystemInvariantsSupervision",
+      "longName": "Host System Hardware Invariants & Logitech Suppression Auditor",
+      "domain": "SystemConfiguration",
+      "category": "Hardware Invariants",
+      "status": "Active",
+      "intervalMinutes": 360,
+      "runner": "powershell",
+      "scriptPath": "tasks/system/MouseFlickerSupervision.ps1",
+      "args": [
+        "Audit"
+      ],
+      "lastRun": "2026-09-01T11:32:48Z",
+      "lastDuration": 1.42,
+      "lastStatus": "Healthy",
+      "nextRun": "2026-09-01T17:32:48Z",
+      "observations": {
+        "errors": 0,
+        "warnings": 0,
+        "info": 3,
+        "total": 3
+      },
+      "description": "Supervises AMD Radeon RX 580 ULPS disabled, DWM MPO OverlayTestMode=5, PowerToys FindMyMouse disabled, and 54/54 Logitech updater suppressions."
+    }
+  ]
+};
+
+    let selectedTaskIds = new Set();
+    let sortField = 'shortName';
+    let sortAsc = true;
+
+    function init() {
+      renderTable();
+      updateMetricCards();
+    }
+
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+      const nxt = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', nxt);
+      localStorage.setItem('lcm_supervision_theme', nxt);
+    }
+
+    function showToast(msg) {
+      const el = document.getElementById('toast-msg');
+      el.innerText = msg;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 3000);
+    }
+
+    function updateMetricCards() {
+      const total = catalogData.tasks.length;
+      const active = catalogData.tasks.filter(t => t.status === 'Active').length;
+      const paused = catalogData.tasks.filter(t => t.status === 'Paused').length;
+      const errors = catalogData.tasks.reduce((sum, t) => sum + (t.observations ? t.observations.errors : 0), 0);
+      const obs = catalogData.tasks.reduce((sum, t) => sum + (t.observations ? t.observations.total : 0), 0);
+
+      document.getElementById('val-total-tasks').innerText = total;
+      document.getElementById('val-active-tasks').innerText = active;
+      document.getElementById('val-paused-tasks').innerText = paused;
+      document.getElementById('val-total-errors').innerText = errors;
+      document.getElementById('val-total-obs').innerText = obs;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('table-tbody');
+      const search = (document.getElementById('search-input').value || '').trim().toLowerCase();
+      const domainVal = document.getElementById('domain-select').value;
+      const statusVal = document.getElementById('status-select').value;
+
+      let filtered = catalogData.tasks.filter(t => {
+        // Search negation support
+        if (search) {
+          const full = (t.shortName + ' ' + t.longName + ' ' + t.domain + ' ' + t.category + ' ' + t.description).toLowerCase();
+          const tokens = search.split(/\s+/);
+          for (let tok of tokens) {
+            if (tok.startsWith('!')) {
+              const exc = tok.slice(1);
+              if (exc && full.includes(exc)) return false;
+            } else {
+              if (!full.includes(tok)) return false;
+            }
+          }
+        }
+
+        if (domainVal !== 'All' && t.domain !== domainVal) return false;
+        if (statusVal !== 'All' && t.status !== statusVal) return false;
+        return true;
+      });
+
+      filtered.sort((a, b) => {
+        let va = (a[sortField] !== undefined ? a[sortField] : '').toString().toLowerCase();
+        let vb = (b[sortField] !== undefined ? b[sortField] : '').toString().toLowerCase();
+        if (sortField === 'errors' || sortField === 'warnings' || sortField === 'info' || sortField === 'total') {
+          va = a.observations ? a.observations[sortField] : 0;
+          vb = b.observations ? b.observations[sortField] : 0;
+        }
+        return sortAsc ? (va < vb ? -1 : 1) : (va > vb ? -1 : 1);
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 32px; color: var(--text-muted);">No matching supervision tasks found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(t => {
+        const isChecked = selectedTaskIds.has(t.id);
+        const statusBadge = `<span class="badge badge-${t.status.toLowerCase()}">${t.status}</span>`;
+        const lastRunFmt = t.lastRun ? t.lastRun.replace('T', ' ').replace('Z', '') : 'Never';
+        const durFmt = t.lastDuration ? ` (${t.lastDuration}s)` : '';
+
+        return `<tr>
+          <td style="text-align: center;"><input type="checkbox" onchange="toggleRowSelect('${t.id}', this.checked)" ${isChecked ? 'checked' : ''}></td>
+          <td><strong style="color: var(--accent);">${t.shortName}</strong></td>
+          <td>${t.longName}</td>
+          <td><span class="badge badge-domain">${t.domain}</span></td>
+          <td>${statusBadge}</td>
+          <td>${t.intervalMinutes}m</td>
+          <td class="count-cell count-error">${t.observations ? t.observations.errors : 0}</td>
+          <td class="count-cell count-warn">${t.observations ? t.observations.warnings : 0}</td>
+          <td class="count-cell count-info">${t.observations ? t.observations.info : 0}</td>
+          <td class="count-cell count-total">${t.observations ? t.observations.total : 0}</td>
+          <td style="font-size: 11px; color: var(--text-secondary);">${lastRunFmt}${durFmt}</td>
+          <td style="text-align: center;">
+            <div class="row-actions">
+              <button class="btn-icon" onclick="runTaskRow('${t.id}')" title="Run task now">⚡ Run</button>
+              <button class="btn-icon" onclick="togglePauseRow('${t.id}')" title="${t.status === 'Paused' ? 'Resume' : 'Pause'}">${t.status === 'Paused' ? '▶' : '⏸'}</button>
+              <button class="btn-icon" onclick="openEditModal('${t.id}')" title="Edit task properties">⚙</button>
+              <button class="btn-icon" onclick="deleteTaskRow('${t.id}')" style="color: var(--danger);" title="Delete task">&times;</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+
+      updateBatchToolbar();
+    }
+
+    function applyFilters() { renderTable(); }
+
+    function resetFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('domain-select').value = 'All';
+      document.getElementById('status-select').value = 'All';
+      document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('card-all').classList.add('active');
+      renderTable();
+    }
+
+    function filterByStatus(status) {
+      document.getElementById('status-select').value = status;
+      applyFilters();
+    }
+
+    function filterBySeverity(type) {
+      resetFilters();
+      if (type === 'Errors') {
+        sortField = 'errors'; sortAsc = false;
+      } else {
+        sortField = 'total'; sortAsc = false;
+      }
+      renderTable();
+    }
+
+    function sortTable(field) {
+      if (sortField === field) {
+        sortAsc = !sortAsc;
+      } else {
+        sortField = field;
+        sortAsc = true;
+      }
+      renderTable();
+    }
+
+    function toggleRowSelect(id, checked) {
+      if (checked) selectedTaskIds.add(id); else selectedTaskIds.delete(id);
+      updateBatchToolbar();
+    }
+
+    function toggleSelectAll(checked) {
+      if (checked) {
+        catalogData.tasks.forEach(t => selectedTaskIds.add(t.id));
+      } else {
+        selectedTaskIds.clear();
+      }
+      renderTable();
+    }
+
+    function updateBatchToolbar() {
+      const tb = document.getElementById('batch-toolbar');
+      const lbl = document.getElementById('selected-count-label');
+      if (selectedTaskIds.size > 0) {
+        tb.style.display = 'flex';
+        lbl.innerText = `${selectedTaskIds.size} task(s) selected`;
+      } else {
+        tb.style.display = 'none';
+      }
+    }
+
+    function batchAction(action) {
+      if (selectedTaskIds.size === 0) return;
+      selectedTaskIds.forEach(id => {
+        const t = catalogData.tasks.find(x => x.id === id);
+        if (t) {
+          if (action === 'Start') t.status = 'Active';
+          if (action === 'Pause') t.status = 'Paused';
+          if (action === 'Stop') t.status = 'Stopped';
+          if (action === 'RunNow') {
+            t.lastRun = new Date().toISOString();
+            t.lastStatus = 'Healthy';
+          }
+        }
+      });
+      showToast(`✓ Applied ${action} to ${selectedTaskIds.size} tasks`);
+      selectedTaskIds.clear();
+      renderTable();
+      updateMetricCards();
+    }
+
+    function runTaskRow(id) {
+      const t = catalogData.tasks.find(x => x.id === id);
+      if (t) {
+        t.lastRun = new Date().toISOString();
+        t.lastStatus = 'Healthy';
+        showToast(`⚡ Executed ${t.shortName} successfully`);
+        renderTable();
+        updateMetricCards();
+      }
+    }
+
+    function togglePauseRow(id) {
+      const t = catalogData.tasks.find(x => x.id === id);
+      if (t) {
+        t.status = t.status === 'Paused' ? 'Active' : 'Paused';
+        showToast(`Updated status for ${t.shortName}: ${t.status}`);
+        renderTable();
+        updateMetricCards();
+      }
+    }
+
+    function deleteTaskRow(id) {
+      if (!confirm(`Are you sure you want to delete supervision task '${id}'?`)) return;
+      catalogData.tasks = catalogData.tasks.filter(t => t.id !== id);
+      selectedTaskIds.delete(id);
+      showToast(`🗑 Deleted task: ${id}`);
+      renderTable();
+      updateMetricCards();
+    }
+
+    function openAddModal() {
+      document.getElementById('modal-title').innerText = '➕ Register New Supervision Task';
+      document.getElementById('task-edit-id').value = '';
+      document.getElementById('task-input-short').value = '';
+      document.getElementById('task-input-long').value = '';
+      document.getElementById('task-input-domain').value = '';
+      document.getElementById('task-input-category').value = '';
+      document.getElementById('task-input-interval').value = '240';
+      document.getElementById('task-input-path').value = '';
+      document.getElementById('task-input-desc').value = '';
+      document.getElementById('task-modal').style.display = 'flex';
+    }
+
+    function openEditModal(id) {
+      const t = catalogData.tasks.find(x => x.id === id);
+      if (!t) return;
+      document.getElementById('modal-title').innerText = '⚙ Edit Supervision Task: ' + t.shortName;
+      document.getElementById('task-edit-id').value = t.id;
+      document.getElementById('task-input-short').value = t.shortName;
+      document.getElementById('task-input-long').value = t.longName;
+      document.getElementById('task-input-domain').value = t.domain;
+      document.getElementById('task-input-category').value = t.category || '';
+      document.getElementById('task-input-interval').value = t.intervalMinutes;
+      document.getElementById('task-input-runner').value = t.runner;
+      document.getElementById('task-input-path').value = t.scriptPath;
+      document.getElementById('task-input-desc').value = t.description || '';
+      document.getElementById('task-modal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('task-modal').style.display = 'none'; }
+    function closeModalOnOverlay(e) { if (e.target.id === 'task-modal') closeModal(); }
+
+    function saveTaskModal() {
+      const editId = document.getElementById('task-edit-id').value;
+      const shortName = document.getElementById('task-input-short').value.trim();
+      const longName = document.getElementById('task-input-long').value.trim();
+      const domain = document.getElementById('task-input-domain').value.trim();
+      const category = document.getElementById('task-input-category').value.trim();
+      const interval = parseInt(document.getElementById('task-input-interval').value, 10) || 240;
+      const runner = document.getElementById('task-input-runner').value;
+      const scriptPath = document.getElementById('task-input-path').value.trim();
+      const desc = document.getElementById('task-input-desc').value.trim();
+
+      if (!shortName || !scriptPath) {
+        alert('Short Name and Script Path are required.');
+        return;
+      }
+
+      if (editId) {
+        const t = catalogData.tasks.find(x => x.id === editId);
+        if (t) {
+          t.shortName = shortName;
+          t.longName = longName;
+          t.domain = domain;
+          t.category = category;
+          t.intervalMinutes = interval;
+          t.runner = runner;
+          t.scriptPath = scriptPath;
+          t.description = desc;
+          showToast(`✓ Updated task: ${shortName}`);
+        }
+      } else {
+        const newId = shortName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        catalogData.tasks.push({
+          id: newId,
+          shortName: shortName,
+          longName: longName || shortName,
+          domain: domain || 'System',
+          category: category || 'General',
+          status: 'Active',
+          intervalMinutes: interval,
+          runner: runner,
+          scriptPath: scriptPath,
+          args: [],
+          lastRun: null,
+          lastStatus: 'Healthy',
+          observations: { errors: 0, warnings: 0, info: 0, total: 0 },
+          description: desc
+        });
+        showToast(`✓ Registered new task: ${shortName}`);
+      }
+
+      closeModal();
+      renderTable();
+      updateMetricCards();
+    }
+
+    // Init on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('lcm_supervision_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      init();
+    });
+  </script>
+</body>
+</html>
