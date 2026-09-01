@@ -128,6 +128,16 @@
       color: #ffffff;
     }
 
+    .btn-purple {
+      background: rgba(163, 113, 247, 0.15);
+      color: #a371f7;
+      border-color: rgba(163, 113, 247, 0.35);
+    }
+    .btn-purple:hover {
+      background: rgba(163, 113, 247, 0.25);
+      border-color: #a371f7;
+    }
+
     .btn-back {
       font-weight: 700;
       color: var(--accent);
@@ -139,7 +149,7 @@
 
     /* Container Layout */
     .main-container {
-      max-width: 1500px;
+      max-width: 1560px;
       width: 100%;
       margin: 0 auto;
       padding: 24px;
@@ -149,11 +159,11 @@
       flex: 1;
     }
 
-    /* Metric Cards Grid */
+    /* Metric Stat Grid */
     .metric-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
     }
 
     .metric-card {
@@ -161,26 +171,29 @@
       border: 1px solid var(--border);
       border-radius: var(--card-radius);
       padding: 16px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
       transition: var(--transition);
       cursor: pointer;
-      backdrop-filter: blur(8px);
+      position: relative;
+      overflow: hidden;
     }
 
-    .metric-card:hover, .metric-card.active {
+    .metric-card:hover {
       border-color: var(--border-bright);
+      background: var(--bg-card-hover);
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .metric-card.active {
+      border-color: var(--accent);
+      background: rgba(88, 166, 255, 0.08);
     }
 
     .metric-title {
       font-size: 12px;
-      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-secondary);
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -189,13 +202,14 @@
     .metric-value {
       font-size: 26px;
       font-weight: 700;
-      font-family: var(--font-mono);
       color: var(--text-primary);
+      font-family: var(--font-mono);
     }
 
     .metric-sub {
       font-size: 11px;
       color: var(--text-muted);
+      margin-top: 4px;
     }
 
     /* Control Panel & Table Toolbar */
@@ -297,7 +311,7 @@
 
     th {
       background: rgba(255, 255, 255, 0.02);
-      padding: 12px 14px;
+      padding: 10px 12px;
       font-weight: 600;
       color: var(--text-secondary);
       border-bottom: 1px solid var(--border);
@@ -314,8 +328,30 @@
     th.sorted-asc::after { content: " ▲"; color: var(--accent); }
     th.sorted-desc::after { content: " ▼"; color: var(--accent); }
 
+    /* Filter Row Dropdowns */
+    .filter-row th {
+      padding: 6px 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .col-filter-select {
+      width: 100%;
+      padding: 4px 6px;
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-primary);
+      outline: none;
+    }
+    .col-filter-select:focus {
+      border-color: var(--accent);
+    }
+
     td {
-      padding: 12px 14px;
+      padding: 10px 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       color: var(--text-primary);
       vertical-align: middle;
@@ -348,59 +384,70 @@
     }
 
     .count-cell {
+      text-align: center;
       font-family: var(--font-mono);
       font-weight: 600;
-      text-align: center;
+      font-size: 12px;
     }
 
     .count-error { color: var(--danger); }
     .count-warn { color: var(--warning); }
     .count-info { color: var(--info); }
-    .count-total { color: var(--text-primary); font-weight: 700; }
+    .count-total { color: var(--accent); font-weight: 700; }
 
-    /* Action Buttons in Row */
+    /* Actions buttons */
     .row-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 4px;
     }
 
     .btn-icon {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 4px;
       padding: 4px 8px;
       font-size: 11px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      background: var(--bg-primary);
-      color: var(--text-primary);
       cursor: pointer;
-    }
-    .btn-icon:hover {
-      border-color: var(--accent);
-      background: var(--bg-card-hover);
+      transition: var(--transition);
     }
 
-    /* Modal Styling */
+    .btn-icon:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      border-color: var(--accent);
+    }
+
+    /* Modal Overlay & Card */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(4px);
-      display: none;
-      justify-content: center;
-      align-items: center;
       z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
     }
 
     .modal-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: var(--card-radius);
-      width: 90%;
-      max-width: 600px;
-      max-height: 85vh;
+      width: 100%;
+      max-width: 650px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      max-height: 90vh;
     }
 
     .modal-header {
@@ -425,6 +472,7 @@
       display: flex;
       justify-content: flex-end;
       gap: 10px;
+      background: rgba(0, 0, 0, 0.1);
     }
 
     .form-group {
@@ -458,14 +506,14 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
+      padding: 12px 20px;
       background: var(--bg-secondary);
       border: 1px solid var(--border-bright);
+      border-radius: 8px;
       color: var(--text-primary);
-      padding: 10px 18px;
-      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       font-size: 13px;
-      font-weight: 600;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      font-weight: 500;
       display: none;
       z-index: 2000;
       animation: fadeIn 0.2s ease-out;
@@ -491,6 +539,7 @@
       <span class="badge badge-domain">LCM v4.3.1</span>
     </div>
     <div class="nav-actions">
+      <button class="btn btn-purple" onclick="openObsModal()" title="View and inspect all recorded status observation events">📊 View Status Observations</button>
       <button class="btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Light/Dark Theme">🌓 Theme</button>
       <button class="btn btn-primary" onclick="openAddModal()">➕ Add Task</button>
       <a href="../../Workspace_Inventory/docs/CM_CONTROL_HUB.html" class="btn btn-back" title="Return to LCM CM Control Hub">⬅ Back to CM Hub</a>
@@ -552,7 +601,7 @@
             <option value="Failing">Failing</option>
           </select>
 
-          <button class="btn" onclick="resetFilters()">↺ Reset</button>
+          <button class="btn" onclick="resetFilters()">↺ Reset All Filters</button>
         </div>
       </div>
 
@@ -568,7 +617,7 @@
       </div>
     </section>
 
-    <!-- Standard Interactive Table -->
+    <!-- Standard Interactive Table with Universal Column Dropdowns -->
     <section class="table-container">
       <table id="supervision-table">
         <thead>
@@ -584,7 +633,82 @@
             <th onclick="sortTable('info')" style="text-align: center;">Info (🔵)</th>
             <th onclick="sortTable('total')" style="text-align: center;">Total Obs</th>
             <th onclick="sortTable('lastRun')">Last Run / Duration</th>
-            <th style="text-align: center;">Actions</th>
+            <th style="text-align: center; width: 170px;">Actions</th>
+          </tr>
+          <tr class="filter-row">
+            <th style="text-align: center;">
+              <select id="col-filter-select" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All</option>
+                <option value="Selected">Checked</option>
+                <option value="Unselected">Unchecked</option>
+              </select>
+            </th>
+            <th>
+              <select id="col-filter-shortname" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All Short Names</option>
+              </select>
+            </th>
+            <th>
+              <select id="col-filter-longname" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All Task Names</option>
+              </select>
+            </th>
+            <th>
+              <select id="col-filter-domain" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All Domains</option>
+              </select>
+            </th>
+            <th>
+              <select id="col-filter-status" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All Statuses</option>
+                <option value="Active">Active</option>
+                <option value="Paused">Paused</option>
+                <option value="Stopped">Stopped</option>
+                <option value="Failing">Failing</option>
+              </select>
+            </th>
+            <th>
+              <select id="col-filter-interval" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All Intervals</option>
+              </select>
+            </th>
+            <th style="text-align: center;">
+              <select id="col-filter-errors" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All</option>
+                <option value="gt0">> 0 (🔴)</option>
+                <option value="eq0">0 (Nominal)</option>
+              </select>
+            </th>
+            <th style="text-align: center;">
+              <select id="col-filter-warns" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All</option>
+                <option value="gt0">> 0 (🟡)</option>
+                <option value="eq0">0 (Nominal)</option>
+              </select>
+            </th>
+            <th style="text-align: center;">
+              <select id="col-filter-info" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All</option>
+                <option value="gt0">> 0 (🔵)</option>
+                <option value="eq0">0</option>
+              </select>
+            </th>
+            <th style="text-align: center;">
+              <select id="col-filter-total" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All</option>
+                <option value="gt0">> 0</option>
+              </select>
+            </th>
+            <th>
+              <select id="col-filter-lastrun" class="col-filter-select" onchange="applyFilters()">
+                <option value="All">All Runs</option>
+                <option value="Healthy">Healthy</option>
+                <option value="Failing">Failing</option>
+              </select>
+            </th>
+            <th style="text-align: center;">
+              <button class="btn" style="padding: 2px 6px; font-size: 11px; width: 100%;" onclick="resetFilters()">Clear</button>
+            </th>
           </tr>
         </thead>
         <tbody id="table-tbody">
@@ -594,6 +718,68 @@
     </section>
 
   </main>
+
+  <!-- Observation Telemetry Explorer Modal -->
+  <div class="modal-overlay" id="obs-modal" onclick="closeObsModalOnOverlay(event)">
+    <div class="modal-card" style="max-width: 1240px; width: 95%;">
+      <div class="modal-header">
+        <h3 style="font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+          <span>📊</span> Workspace Status Observations & Telemetry Ledger
+        </h3>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-primary" onclick="printObsLedger()">🖨️ Print / PDF</button>
+          <button class="btn btn-back" onclick="closeObsModal()">⬅ Back</button>
+        </div>
+      </div>
+
+      <!-- Filters Row for Observations -->
+      <div style="padding: 14px 20px 0 20px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <input type="text" id="obs-search-input" class="search-input" style="max-width: 380px;" placeholder="🔍 Filter observations (task, domain, details, timestamp)..." oninput="renderObsTable()">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <select id="obs-task-filter" class="filter-select" onchange="renderObsTable()">
+            <option value="All">All Tasks</option>
+          </select>
+          <select id="obs-severity-filter" class="filter-select" onchange="renderObsTable()">
+            <option value="All">All Severities</option>
+            <option value="errors">🔴 Errors Only</option>
+            <option value="warnings">🟡 Warnings Only</option>
+            <option value="info">🔵 Info Only</option>
+          </select>
+          <select id="obs-status-filter" class="filter-select" onchange="renderObsTable()">
+            <option value="All">All Statuses</option>
+            <option value="Healthy">Healthy</option>
+            <option value="Failing">Failing</option>
+          </select>
+          <button class="btn" onclick="resetObsFilters()">↺ Reset Filters</button>
+        </div>
+      </div>
+
+      <div class="modal-body" style="padding: 14px 20px; max-height: 60vh; overflow-y: auto;">
+        <table id="obs-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr>
+              <th style="width: 170px;">Timestamp</th>
+              <th style="width: 160px;">Supervision Task</th>
+              <th style="width: 90px; text-align: center;">Status</th>
+              <th style="width: 70px; text-align: center;">🔴 Err</th>
+              <th style="width: 70px; text-align: center;">🟡 Warn</th>
+              <th style="width: 70px; text-align: center;">🔵 Info</th>
+              <th style="width: 85px; text-align: center;">Duration</th>
+              <th>Telemetry Observation Details & Notes</th>
+            </tr>
+          </thead>
+          <tbody id="obs-table-tbody">
+            <!-- Dynamically rendered by renderObsTable() -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <span id="obs-count-label" style="font-size: 12px; color: var(--text-secondary);">Showing 0 observations</span>
+        <button class="btn" onclick="closeObsModal()">Close</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Add / Modify Task Modal -->
   <div class="modal-overlay" id="task-modal" onclick="closeModalOnOverlay(event)">
@@ -618,27 +804,27 @@
         </div>
         <div class="form-group">
           <label>Category</label>
-          <input type="text" class="form-control" id="task-input-category" placeholder="e.g. Subsystem Health">
+          <input type="text" class="form-control" id="task-input-category" placeholder="e.g. Subsystem Health or Hardware Invariants">
         </div>
         <div class="form-group">
-          <label>Interval (Minutes)</label>
-          <input type="number" class="form-control" id="task-input-interval" value="240" min="5">
+          <label>Execution Interval (Minutes)</label>
+          <input type="number" class="form-control" id="task-input-interval" value="240">
         </div>
         <div class="form-group">
-          <label>Runner Environment</label>
+          <label>Runner Type</label>
           <select class="form-control" id="task-input-runner">
-            <option value="python">Python (Python 3.14 / Virtualenv)</option>
-            <option value="powershell">PowerShell (pwsh.exe 7+)</option>
-            <option value="batch">Batch / Command Script</option>
+            <option value="python">Python 3 (tasks/*.py)</option>
+            <option value="powershell">PowerShell 7 (tasks/*.ps1)</option>
+            <option value="cmd">Windows CMD (tasks/*.cmd)</option>
           </select>
         </div>
         <div class="form-group">
           <label>Script Path (Relative to Workspace_Supervision)</label>
-          <input type="text" class="form-control" id="task-input-path" placeholder="e.g. tasks/bluetooth/BleSupervisionTask.py">
+          <input type="text" class="form-control" id="task-input-path" placeholder="tasks/bluetooth/BleSupervisionTask.py">
         </div>
         <div class="form-group">
-          <label>Description & Purpose</label>
-          <textarea class="form-control" id="task-input-desc" rows="3" placeholder="Brief summary of supervision invariants..."></textarea>
+          <label>Description & Scope</label>
+          <textarea class="form-control" id="task-input-desc" rows="3" placeholder="Briefly describe what invariants or hardware states this task supervises..."></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -656,7 +842,7 @@
     let catalogData = {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "version": "1.0.0",
-  "lastUpdated": "2026-09-01T11:32:49Z",
+  "lastUpdated": "2026-09-01T11:33:47Z",
   "tasks": [
     {
       "id": "ble-fleet-stability",
@@ -671,10 +857,10 @@
       "args": [
         "240"
       ],
-      "lastRun": "2026-09-01T13:32:09.814623+02:00",
-      "lastDuration": 0.114,
+      "lastRun": "2026-09-01T13:33:47.263073+02:00",
+      "lastDuration": 0.129,
       "lastStatus": "Healthy",
-      "nextRun": "2026-09-01T15:32:09Z",
+      "nextRun": "2026-09-01T15:33:47Z",
       "observations": {
         "errors": 0,
         "warnings": 0,
@@ -711,11 +897,16 @@
   ]
 };
 
+    // Embedded Observation Telemetry History
+    let observationHistoryData = [{"timestamp":"2026-09-01T13:32:09.814623+02:00","taskId":"ble-fleet-stability","shortName":"BleSupervision","durationSeconds":0.114,"status":"Healthy","errors":0,"warnings":0,"info":51,"total":51,"summary":"Monitored 51 BLE entities: 100% nominal, 0 dropouts, 0 oscillations."},{"timestamp":"2026-09-01T11:32:15Z","taskId":"system-hardware-invariants","shortName":"SystemInvariantsSupervision","durationSeconds":0.714,"status":"Failing","errors":1,"warnings":0,"info":0,"total":1,"summary":"Runner exception: Conversion from JSON failed with error: Unexpected character encountered while parsing value: M. Path '', line 0, position 0."},{"timestamp":"2026-09-01T11:32:34Z","taskId":"system-hardware-invariants","shortName":"SystemInvariantsSupervision","durationSeconds":0.017,"status":"Failing","errors":1,"warnings":0,"info":0,"total":1,"summary":"Runner exception: The property 'Count' cannot be found on this object. Verify that the property exists."},{"timestamp":"2026-09-01T11:32:48Z","taskId":"system-hardware-invariants","shortName":"SystemInvariantsSupervision","durationSeconds":1.42,"status":"Healthy","errors":0,"warnings":0,"info":3,"total":3,"summary":"All hardware and mouse focus invariants verified (54/54 Logitech suppressed, MPO=5, FindMyMouse=False)."},{"timestamp":"2026-09-01T13:33:47.263073+02:00","taskId":"ble-fleet-stability","shortName":"BleSupervision","durationSeconds":0.129,"status":"Healthy","errors":0,"warnings":0,"info":51,"total":51,"summary":"Monitored 51 BLE entities: 100% nominal, 0 dropouts, 0 oscillations."}];
+
     let selectedTaskIds = new Set();
     let sortField = 'shortName';
     let sortAsc = true;
 
     function init() {
+      populateHeaderDropdowns();
+      populateObsTaskDropdown();
       renderTable();
       updateMetricCards();
     }
@@ -732,6 +923,39 @@
       el.innerText = msg;
       el.style.display = 'block';
       setTimeout(() => { el.style.display = 'none'; }, 3000);
+    }
+
+    function populateHeaderDropdowns() {
+      const tasks = catalogData.tasks || [];
+      
+      const shortNames = new Set(tasks.map(t => t.shortName).filter(Boolean));
+      const longNames = new Set(tasks.map(t => t.longName).filter(Boolean));
+      const domains = new Set(tasks.map(t => t.domain).filter(Boolean));
+      const intervals = new Set(tasks.map(t => t.intervalMinutes + 'm').filter(Boolean));
+
+      const fillSel = (id, set, def) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = `<option value="All">${def}</option>`;
+        Array.from(set).sort().forEach(val => {
+          el.innerHTML += `<option value="${val}">${val}</option>`;
+        });
+      };
+
+      fillSel('col-filter-shortname', shortNames, 'All Short Names');
+      fillSel('col-filter-longname', longNames, 'All Task Names');
+      fillSel('col-filter-domain', domains, 'All Domains');
+      fillSel('col-filter-interval', intervals, 'All Intervals');
+    }
+
+    function populateObsTaskDropdown() {
+      const el = document.getElementById('obs-task-filter');
+      if (!el) return;
+      el.innerHTML = '<option value="All">All Tasks</option>';
+      const tasks = catalogData.tasks || [];
+      tasks.forEach(t => {
+        el.innerHTML += `<option value="${t.id}">${t.shortName} (${t.domain})</option>`;
+      });
     }
 
     function updateMetricCards() {
@@ -751,10 +975,29 @@
     function renderTable() {
       const tbody = document.getElementById('table-tbody');
       const search = (document.getElementById('search-input').value || '').trim().toLowerCase();
+      
+      // Global toolbar filters
       const domainVal = document.getElementById('domain-select').value;
       const statusVal = document.getElementById('status-select').value;
 
+      // Header column dropdown filters
+      const colSel = document.getElementById('col-filter-select') ? document.getElementById('col-filter-select').value : 'All';
+      const colShort = document.getElementById('col-filter-shortname') ? document.getElementById('col-filter-shortname').value : 'All';
+      const colLong = document.getElementById('col-filter-longname') ? document.getElementById('col-filter-longname').value : 'All';
+      const colDomain = document.getElementById('col-filter-domain') ? document.getElementById('col-filter-domain').value : 'All';
+      const colStatus = document.getElementById('col-filter-status') ? document.getElementById('col-filter-status').value : 'All';
+      const colInterval = document.getElementById('col-filter-interval') ? document.getElementById('col-filter-interval').value : 'All';
+      const colErrors = document.getElementById('col-filter-errors') ? document.getElementById('col-filter-errors').value : 'All';
+      const colWarns = document.getElementById('col-filter-warns') ? document.getElementById('col-filter-warns').value : 'All';
+      const colInfo = document.getElementById('col-filter-info') ? document.getElementById('col-filter-info').value : 'All';
+      const colTotal = document.getElementById('col-filter-total') ? document.getElementById('col-filter-total').value : 'All';
+      const colLastRun = document.getElementById('col-filter-lastrun') ? document.getElementById('col-filter-lastrun').value : 'All';
+
       let filtered = catalogData.tasks.filter(t => {
+        // Selection filter
+        if (colSel === 'Selected' && !selectedTaskIds.has(t.id)) return false;
+        if (colSel === 'Unselected' && selectedTaskIds.has(t.id)) return false;
+
         // Search negation support
         if (search) {
           const full = (t.shortName + ' ' + t.longName + ' ' + t.domain + ' ' + t.category + ' ' + t.description).toLowerCase();
@@ -769,8 +1012,37 @@
           }
         }
 
+        // Global dropdowns
         if (domainVal !== 'All' && t.domain !== domainVal) return false;
         if (statusVal !== 'All' && t.status !== statusVal) return false;
+
+        // Column dropdowns
+        if (colShort !== 'All' && t.shortName !== colShort) return false;
+        if (colLong !== 'All' && t.longName !== colLong) return false;
+        if (colDomain !== 'All' && t.domain !== colDomain) return false;
+        if (colStatus !== 'All' && t.status !== colStatus) return false;
+        if (colInterval !== 'All' && (t.intervalMinutes + 'm') !== colInterval) return false;
+
+        const errCount = t.observations ? t.observations.errors : 0;
+        if (colErrors === 'gt0' && errCount <= 0) return false;
+        if (colErrors === 'eq0' && errCount > 0) return false;
+
+        const warnCount = t.observations ? t.observations.warnings : 0;
+        if (colWarns === 'gt0' && warnCount <= 0) return false;
+        if (colWarns === 'eq0' && warnCount > 0) return false;
+
+        const infoCount = t.observations ? t.observations.info : 0;
+        if (colInfo === 'gt0' && infoCount <= 0) return false;
+        if (colInfo === 'eq0' && infoCount > 0) return false;
+
+        const totCount = t.observations ? t.observations.total : 0;
+        if (colTotal === 'gt0' && totCount <= 0) return false;
+
+        if (colLastRun !== 'All') {
+          if (colLastRun === 'Healthy' && t.lastStatus !== 'Healthy') return false;
+          if (colLastRun === 'Failing' && t.lastStatus !== 'Failing') return false;
+        }
+
         return true;
       });
 
@@ -809,6 +1081,7 @@
           <td style="font-size: 11px; color: var(--text-secondary);">${lastRunFmt}${durFmt}</td>
           <td style="text-align: center;">
             <div class="row-actions">
+              <button class="btn-icon" onclick="openObsForTask('${t.id}')" title="View Observation Telemetry Feed" style="color: var(--accent);">👁️ Obs</button>
               <button class="btn-icon" onclick="runTaskRow('${t.id}')" title="Run task now">⚡ Run</button>
               <button class="btn-icon" onclick="togglePauseRow('${t.id}')" title="${t.status === 'Paused' ? 'Resume' : 'Pause'}">${t.status === 'Paused' ? '▶' : '⏸'}</button>
               <button class="btn-icon" onclick="openEditModal('${t.id}')" title="Edit task properties">⚙</button>
@@ -827,6 +1100,20 @@
       document.getElementById('search-input').value = '';
       document.getElementById('domain-select').value = 'All';
       document.getElementById('status-select').value = 'All';
+      
+      const resetSel = (id) => { const el = document.getElementById(id); if (el) el.value = 'All'; };
+      resetSel('col-filter-select');
+      resetSel('col-filter-shortname');
+      resetSel('col-filter-longname');
+      resetSel('col-filter-domain');
+      resetSel('col-filter-status');
+      resetSel('col-filter-interval');
+      resetSel('col-filter-errors');
+      resetSel('col-filter-warns');
+      resetSel('col-filter-info');
+      resetSel('col-filter-total');
+      resetSel('col-filter-lastrun');
+
       document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('active'));
       document.getElementById('card-all').classList.add('active');
       renderTable();
@@ -834,6 +1121,8 @@
 
     function filterByStatus(status) {
       document.getElementById('status-select').value = status;
+      const colSt = document.getElementById('col-filter-status');
+      if (colSt) colSt.value = status;
       applyFilters();
     }
 
@@ -841,6 +1130,8 @@
       resetFilters();
       if (type === 'Errors') {
         sortField = 'errors'; sortAsc = false;
+        const colErr = document.getElementById('col-filter-errors');
+        if (colErr) colErr.value = 'gt0';
       } else {
         sortField = 'total'; sortAsc = false;
       }
@@ -932,6 +1223,96 @@
       updateMetricCards();
     }
 
+    // -------------------------------------------------------------------------
+    // Observation Telemetry Ledger Functions
+    // -------------------------------------------------------------------------
+    function openObsModal() {
+      const modal = document.getElementById('obs-modal');
+      populateObsTaskDropdown();
+      renderObsTable();
+      modal.classList.add('open');
+    }
+
+    function openObsForTask(taskId) {
+      openObsModal();
+      const taskSel = document.getElementById('obs-task-filter');
+      if (taskSel) {
+        taskSel.value = taskId;
+        renderObsTable();
+      }
+    }
+
+    function closeObsModal() {
+      const modal = document.getElementById('obs-modal');
+      modal.classList.remove('open');
+    }
+
+    function closeObsModalOnOverlay(e) {
+      if (e.target.id === 'obs-modal') closeObsModal();
+    }
+
+    function resetObsFilters() {
+      document.getElementById('obs-search-input').value = '';
+      document.getElementById('obs-task-filter').value = 'All';
+      document.getElementById('obs-severity-filter').value = 'All';
+      document.getElementById('obs-status-filter').value = 'All';
+      renderObsTable();
+    }
+
+    function renderObsTable() {
+      const tbody = document.getElementById('obs-table-tbody');
+      const search = (document.getElementById('obs-search-input').value || '').trim().toLowerCase();
+      const taskFilter = document.getElementById('obs-task-filter').value;
+      const sevFilter = document.getElementById('obs-severity-filter').value;
+      const statFilter = document.getElementById('obs-status-filter').value;
+
+      let filtered = (observationHistoryData || []).filter(item => {
+        if (taskFilter !== 'All' && item.taskId !== taskFilter) return false;
+        if (statFilter !== 'All' && item.status !== statFilter) return false;
+
+        if (sevFilter === 'errors' && (!item.errors || item.errors <= 0)) return false;
+        if (sevFilter === 'warnings' && (!item.warnings || item.warnings <= 0)) return false;
+        if (sevFilter === 'info' && (!item.info || item.info <= 0)) return false;
+
+        if (search) {
+          const text = (item.timestamp + ' ' + (item.shortName || item.taskId) + ' ' + item.status + ' ' + item.summary).toLowerCase();
+          if (!text.includes(search)) return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('obs-count-label').innerText = `Showing ${filtered.length} of ${observationHistoryData.length} observations`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--text-muted);">No observation records match criteria.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        const tsFmt = item.timestamp ? item.timestamp.replace('T', ' ').substring(0, 19) : '-';
+        const stBadge = item.status === 'Healthy' 
+          ? '<span class="badge badge-active">Healthy</span>' 
+          : '<span class="badge badge-failing">Failing</span>';
+        const durFmt = item.durationSeconds !== undefined ? `${item.durationSeconds}s` : '-';
+
+        return `<tr>
+          <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary);">${tsFmt}</td>
+          <td><strong style="color: var(--accent);">${item.shortName || item.taskId}</strong></td>
+          <td style="text-align: center;">${stBadge}</td>
+          <td class="count-cell count-error">${item.errors || 0}</td>
+          <td class="count-cell count-warn">${item.warnings || 0}</td>
+          <td class="count-cell count-info">${item.info || 0}</td>
+          <td style="text-align: center; font-size: 11px; font-family: var(--font-mono);">${durFmt}</td>
+          <td style="line-height: 1.4; color: var(--text-primary);">${item.summary || '-'}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function printObsLedger() {
+      window.print();
+    }
+
     function openAddModal() {
       document.getElementById('modal-title').innerText = '➕ Register New Supervision Task';
       document.getElementById('task-edit-id').value = '';
@@ -1015,6 +1396,7 @@
       }
 
       closeModal();
+      populateHeaderDropdowns();
       renderTable();
       updateMetricCards();
     }
