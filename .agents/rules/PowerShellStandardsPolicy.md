@@ -1,4 +1,4 @@
-﻿---
+---
 name: PowerShellStandardsPolicy
 description: Authoritative PowerShell coding standards enforcing StrictMode array wrapping, approved verb compliance, string interpolation safety, pipeline hygiene, and Pester v5 syntax.
 globs: "*.ps1,*.psm1,*.psd1"
@@ -9,9 +9,9 @@ Module: PowerShellStandardsPolicy
 Purpose: Defines mandatory PowerShell standards for strict mode resilience, verb compliance, string interpolation, pipeline hygiene, and testing across all repositories.  
 Path: .agents/rules/PowerShellStandardsPolicy.md  
 Authors: Rolf, Workspace_AI Governance  
-Version: 7.0.0  
+Version: 7.1.0  
 Status: Authoritative Policy  
-Date: 2026-08-29  
+Date: 2026-09-03  
 
 ---
 
@@ -207,4 +207,31 @@ Brute-force file-by-file recursion (`icacls /T`, `takeown /R`) across entire sto
   1. Scripts managing NTFS security descriptors `MUST` establish container and object inheritance (`(OI)(CI)(F)`) on parent/root nodes and re-enable clean inheritance (`/inheritance:e`) to allow child objects to inherit permissions dynamically in 0ms.
   2. Explicit `icacls` or `takeown` executions `MUST` be targeted specifically to directory nodes where inheritance is severed or blocked (`Acl.AreAccessRulesProtected == $true`), explicit `DENY` rules are present, or directory junctions require `/L` link-level authorization.
   3. Blind whole-volume recursive rewriting across millions of healthy inheriting files is strictly prohibited.
+
+---
+
+### RULE-PS-015: Variable String Interpolation and Colon Boundaries
+The bare syntax `"$var:"` inside double-quoted strings is **strictly prohibited** to avoid PowerShell scope-provider collisions (`ParserError`). PowerShell parses `$identifier:` as an unclosed scope qualifier (`$global:`, `$script:`, `$env:`, drive provider `C:`), causing a fatal parse error at script load time.
+
+- **Mandatory Invariants**:
+  1. **Brace Delimitation**: Whenever an interpolated variable is immediately followed by a colon or any non-identifier character that would ambiguate the variable boundary, enclose the variable name in curly braces:
+     ```powershell
+     Write-Host "Verified Baseline Resolution: [${commitSha}: $commitMsg]"
+     Write-Host "Drive root: ${driveLetter}:\\"
+     ```
+  2. **Format String Alternative**: Use PowerShell format strings as a fully safe alternative for structured output:
+     ```powershell
+     Write-Host ("Verified Baseline Resolution: [{0}: {1}]" -f $commitSha, $commitMsg)
+     ```
+  3. **Sub-Expression for Object Properties**: Object property access and nested expressions inside double-quoted strings `MUST` always use sub-expression syntax:
+     ```powershell
+     Write-Host "Status: $($result.Status) at $($result.Timestamp)"
+     ```
+
+- **Strictly Forbidden**:
+  ```powershell
+  Write-Host "Baseline: [$commitSha: $commitMsg]"   # ParserError — $commitSha: treated as scope qualifier
+  Write-Host "Drive: $driveLetter:\\"               # ParserError — $driveLetter: treated as drive provider
+  Write-Host "Value: $obj.Property"                 # Silent failure — expands $obj then appends literal '.Property'
+  ```
 

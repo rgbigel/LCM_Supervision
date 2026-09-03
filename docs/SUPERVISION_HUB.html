@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workspace Supervision Hub - LCM Fleet Stability & Invariants</title>
+  <title>Workspace Supervision Hub V6.1.0 - LCM Fleet Stability & Invariants</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -534,9 +534,9 @@
   <header class="top-bar">
     <div class="brand-section">
       <a href="javascript:void(0)" class="brand-logo">
-        <span>🛡️</span> Workspace Supervision Hub
+        <span>👁️</span> Workspace Supervision Hub
       </a>
-      <span class="badge badge-domain">LCM v4.3.1</span>
+      <span class="badge badge-domain">LCM V6.1.0</span>
     </div>
     <div class="nav-actions">
       <button class="btn btn-purple" onclick="openObsModal()" title="View and inspect all recorded status observation events">📊 View Status Observations</button>
@@ -622,92 +622,114 @@
       <table id="supervision-table">
         <thead>
           <tr>
-            <th style="width: 36px; text-align: center;"><input type="checkbox" id="select-all-chk" onchange="toggleSelectAll(this.checked)"></th>
-            <th onclick="sortTable('shortName')">Short Name</th>
-            <th onclick="sortTable('longName')">Full Task Name</th>
-            <th onclick="sortTable('domain')">Domain</th>
-            <th onclick="sortTable('status')">Status</th>
-            <th onclick="sortTable('intervalMinutes')">Interval</th>
-            <th onclick="sortTable('errors')" style="text-align: center;">Errors (🔴)</th>
-            <th onclick="sortTable('warnings')" style="text-align: center;">Warns (🟡)</th>
-            <th onclick="sortTable('info')" style="text-align: center;">Info (🔵)</th>
-            <th onclick="sortTable('total')" style="text-align: center;">Total Obs</th>
-            <th onclick="sortTable('lastRun')">Last Run / Duration</th>
-            <th style="text-align: center; width: 170px;">Actions</th>
-          </tr>
-          <tr class="filter-row">
-            <th style="text-align: center;">
-              <select id="col-filter-select" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All</option>
-                <option value="Selected">Checked</option>
-                <option value="Unselected">Unchecked</option>
-              </select>
+            <th style="width: 36px; text-align: center;">
+              <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
+                <input type="checkbox" id="select-all-chk" onchange="toggleSelectAll(this.checked)">
+                <select id="col-filter-select" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All</option>
+                  <option value="Selected">Checked</option>
+                  <option value="Unselected">Unchecked</option>
+                </select>
+              </div>
             </th>
-            <th>
-              <select id="col-filter-shortname" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All Short Names</option>
-              </select>
+            <th onclick="sortTable('shortName')">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Short Name</span>
+                <select id="col-filter-shortname" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All Short Names</option>
+                </select>
+              </div>
             </th>
-            <th>
-              <select id="col-filter-longname" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All Task Names</option>
-              </select>
+            <th onclick="sortTable('longName')">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Full Task Name</span>
+                <select id="col-filter-longname" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All Task Names</option>
+                </select>
+              </div>
             </th>
-            <th>
-              <select id="col-filter-domain" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All Domains</option>
-              </select>
+            <th onclick="sortTable('domain')">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Domain</span>
+                <select id="col-filter-domain" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All Domains</option>
+                </select>
+              </div>
             </th>
-            <th>
-              <select id="col-filter-status" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All Statuses</option>
-                <option value="Active">Active</option>
-                <option value="Paused">Paused</option>
-                <option value="Stopped">Stopped</option>
-                <option value="Failing">Failing</option>
-              </select>
+            <th onclick="sortTable('status')">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Status</span>
+                <select id="col-filter-status" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All Statuses</option>
+                  <option value="Active">Active</option>
+                  <option value="Paused">Paused</option>
+                  <option value="Stopped">Stopped</option>
+                  <option value="Failing">Failing</option>
+                </select>
+              </div>
             </th>
-            <th>
-              <select id="col-filter-interval" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All Intervals</option>
-              </select>
+            <th onclick="sortTable('intervalMinutes')">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Interval</span>
+                <select id="col-filter-interval" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All Intervals</option>
+                </select>
+              </div>
             </th>
-            <th style="text-align: center;">
-              <select id="col-filter-errors" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All</option>
-                <option value="gt0">> 0 (🔴)</option>
-                <option value="eq0">0 (Nominal)</option>
-              </select>
+            <th onclick="sortTable('errors')" style="text-align: center;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Errors (🔴)</span>
+                <select id="col-filter-errors" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All</option>
+                  <option value="gt0">> 0 (🔴)</option>
+                  <option value="eq0">0 (Nominal)</option>
+                </select>
+              </div>
             </th>
-            <th style="text-align: center;">
-              <select id="col-filter-warns" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All</option>
-                <option value="gt0">> 0 (🟡)</option>
-                <option value="eq0">0 (Nominal)</option>
-              </select>
+            <th onclick="sortTable('warnings')" style="text-align: center;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Warns (🟡)</span>
+                <select id="col-filter-warns" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All</option>
+                  <option value="gt0">> 0 (🟡)</option>
+                  <option value="eq0">0 (Nominal)</option>
+                </select>
+              </div>
             </th>
-            <th style="text-align: center;">
-              <select id="col-filter-info" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All</option>
-                <option value="gt0">> 0 (🔵)</option>
-                <option value="eq0">0</option>
-              </select>
+            <th onclick="sortTable('info')" style="text-align: center;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Info (🔵)</span>
+                <select id="col-filter-info" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All</option>
+                  <option value="gt0">> 0 (🔵)</option>
+                  <option value="eq0">0</option>
+                </select>
+              </div>
             </th>
-            <th style="text-align: center;">
-              <select id="col-filter-total" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All</option>
-                <option value="gt0">> 0</option>
-              </select>
+            <th onclick="sortTable('total')" style="text-align: center;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Total Obs</span>
+                <select id="col-filter-total" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All</option>
+                  <option value="gt0">> 0</option>
+                </select>
+              </div>
             </th>
-            <th>
-              <select id="col-filter-lastrun" class="col-filter-select" onchange="applyFilters()">
-                <option value="All">All Runs</option>
-                <option value="Healthy">Healthy</option>
-                <option value="Failing">Failing</option>
-              </select>
+            <th onclick="sortTable('lastRun')">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span>Last Run / Duration</span>
+                <select id="col-filter-lastrun" class="col-filter-select" onchange="applyFilters()" onclick="event.stopPropagation()">
+                  <option value="All">All Runs</option>
+                  <option value="Healthy">Healthy</option>
+                  <option value="Failing">Failing</option>
+                </select>
+              </div>
             </th>
-            <th style="text-align: center;">
-              <button class="btn" style="padding: 2px 6px; font-size: 11px; width: 100%;" onclick="resetFilters()">Clear</button>
+            <th style="text-align: center; width: 170px;">
+              <div style="display: flex; flex-direction: column; gap: 4px; align-items: center; justify-content: center; height: 100%;">
+                <span>Actions</span>
+                <button class="btn" style="padding: 2px 6px; font-size: 11px; width: 100%; margin-top: 2px;" onclick="resetFilters()">Clear</button>
+              </div>
             </th>
           </tr>
         </thead>

@@ -114,3 +114,7 @@ The review frequency is governed by `review_granularity` in `Workspace_Inventory
 
 
 
+
+### RULE-LCM-014: Implementation Plan Auto-Proceed Block Invariant
+1. **Mandatory Stop on Open Questions**: Whenever an Implementation Plan (e.g., implementation_plan.md) is drafted and contains **Open Questions** requiring operator clarification, architectural feedback, or explicit decisions, the AI agent MUST NOT proceed to execution under any circumstances.
+2. **Override of Auto-Approval**: Even if automated workspace review policies or system hooks attempt to automatically approve the artifact and trigger execution, the AI agent MUST explicitly halt, reject the auto-proceed, highlight the unresolved questions, and await a direct, human-authored response from the operator before executing any code modifications.
