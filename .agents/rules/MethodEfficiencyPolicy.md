@@ -1,4 +1,4 @@
-# MethodEfficiencyPolicy
+﻿# MethodEfficiencyPolicy
 
 Module: MethodEfficiencyPolicy.md  
 Purpose: Defines auto-acceptance, zero-test-trigger invariants, and method efficiency rules for generated inventory telemetry and logs.  

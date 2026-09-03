@@ -1,4 +1,4 @@
----
+﻿---
 name: PowerShellStandardsPolicy
 description: Authoritative PowerShell coding standards enforcing StrictMode array wrapping, approved verb compliance, string interpolation safety, pipeline hygiene, and Pester v5 syntax.
 globs: "*.ps1,*.psm1,*.psd1"
