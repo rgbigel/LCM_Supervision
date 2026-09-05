@@ -9,9 +9,9 @@ Module: ProposalReviewFlowPolicy
 Purpose: Enforces ticket-first proposals, batch commands, Beyond Compare 5 review gates, granularity controls, and Workspace_Inventory dual-commit synchronization.  
 Path: .agents/rules/ProposalReviewFlowPolicy.md  
 Authors: Rolf, Workspace_AI Governance  
-Version: 7.1.0  
+Version: 7.3.0  
 Status: Authoritative Policy  
-Date: 2026-08-30  
+Date: 2026-09-05  
 
 ---
 
@@ -38,6 +38,7 @@ The review frequency is governed by `review_granularity` in `Workspace_Inventory
 
 ### RULE-LCM-004: Visual Diff Review & Exemption Scope
 - **Governed Repositories & Root Container**: Every governed repository and the Root Container (`D:\Git_Repositories`) `MUST` undergo visual diff review via `Invoke-BeyondCompareReview.ps1 <RepoName>` before commit.
+- **Dual-Session Junction Review**: For repositories containing NTFS directory junctions (e.g. `.agents` pointing to `.lcm\.agents`, or `.agents\rules` pointing to `.lcm\.agents\rules`), `Invoke-BeyondCompareReview.ps1` `MUST` automatically dispatch a second Beyond Compare review session targeting the live junction destination on the right pane per `RULE-REV-008`.
 - **Sole Exemption**: `Workspace_Inventory` is **the only exempt repository** from visual BC5 review because it acts strictly as the tool/agent-controlled CM ledger (proposals, session state, review evidence, logs).
 
 ### RULE-LCM-005: Dual-Commit and Push Synchronization Invariant
@@ -118,3 +119,36 @@ The review frequency is governed by `review_granularity` in `Workspace_Inventory
 ### RULE-LCM-014: Implementation Plan Auto-Proceed Block Invariant
 1. **Mandatory Stop on Open Questions**: Whenever an Implementation Plan (e.g., implementation_plan.md) is drafted and contains **Open Questions** requiring operator clarification, architectural feedback, or explicit decisions, the AI agent MUST NOT proceed to execution under any circumstances.
 2. **Override of Auto-Approval**: Even if automated workspace review policies or system hooks attempt to automatically approve the artifact and trigger execution, the AI agent MUST explicitly halt, reject the auto-proceed, highlight the unresolved questions, and await a direct, human-authored response from the operator before executing any code modifications.
+
+### RULE-LCM-015: Strict BUG: and CRP: Intake Gate Invariant
+1. **Intake Signal Only**: The appearance of `BUG:` or `CRP:` designators in user input `MUST NEVER` be interpreted as a request to begin analysis, develop an Implementation Plan, or execute code modifications.
+2. **Mandatory OPEN Intake**: The AI agent's sole initial responsibility upon receiving `BUG:` or `CRP:` input is to register the items into the Configuration Management ledger (`Workspace_Inventory/data/proposals/proposals.json` and formal specifications under `Workspace_Inventory/docs/Proposals/`) in the **`OPEN`** state (`state: "bug"` or `"suggested"`, `progress_state: "open"`).
+3. **Priority Hierarchy**:
+   - Items designated `BUG:` `MUST` automatically receive higher initial triage priority than `CRP:` items.
+   - Priority markings (including "*highest priority*" or "*critical*") affect ordering only; they `DO NOT` authorize departure from the `OPEN` state.
+4. **Prohibition of Premature Planning**: The agent `MUST NOT` generate an `implementation_plan.md` or execute source code changes for any registered item without receiving an explicit activation trigger.
+
+### RULE-LCM-016: Explicit PROCEED and PROCEED ALL Activation Triggers
+Proposals held in the `OPEN` state may transition to Implementation Planning and execution `ONLY` upon receiving one of two explicit operator triggers:
+1. **`PROCEED <Item/ID>`**:
+   - Authorizes implementation planning and subsequent execution for the **single** designated BUG or CRP item only.
+   - All other items in the batch remain strictly in the `OPEN` state.
+2. **`PROCEED ALL`**:
+   - Authorizes execution **strictly for the items positioned ABOVE the `PROCEED ALL` keyword** in the user's prompt or batch submission.
+   - `MUST NOT` apply to any items listed below or following the `PROCEED ALL` marker.
+3. **Strict Invariant**: In the absence of an explicit `PROCEED` or `PROCEED ALL` trigger, the AI agent `MUST STOP` immediately after intake registration and present the registered items to the operator for document review.
+
+### RULE-LCM-017: Autonomous System Exception Boundary & 2-Attempt Loop Breaker
+1. **Autonomous Exception Scope**: As a sole exception to `RULE-LCM-016`, the AI agent is permitted to assume an implicit `PROCEED` to immediately remediate a self-discovered or runtime-generated `BUG` `ONLY IF` all of the following conditions are simultaneously met:
+   - **Critical System/Transport Behavior**: The defect represents a severe runtime blocker directly disrupting operations (e.g., REST daemon socket drops on Port 9876, IPC transport failures, or blocking background daemon aborts).
+   - **Within Agent Capability**: The root cause is definitively identified and remediable within the agent's direct operational scope.
+   - **No Architectural Redesign**: The fix requires no architectural redesign, schema changes, or breaking API alterations.
+   - **Net Positive Impact**: The fix will not create cascading side-effects or regressions exceeding the problem being solved.
+2. **Mandatory 2-Attempt Loop Breaker**:
+   - If two (2) consecutive attempts to fix the runtime defect fail to resolve the issue, the autonomous `PROCEED` exception is **immediately and irrevocably revoked**.
+   - The agent `MUST HALT` all modification attempts, mark the BUG item as `blocked`/`open` in the ledger, document the failure telemetry, and yield full control back to the operator.
+
+### RULE-LCM-018: Credit Exhaustion & Batch Execution Granularity Guard
+1. **Batch Size Safety**: Multi-item batches `MUST` be segmented into manageable, verifiable increments to prevent credit, context, and token exhaustion.
+2. **Discrete Review Boundaries**: Each approved proposal or tight batch `MUST` reach a stable, verifiable state before proceeding to subsequent items, guaranteeing that uncommitted or partially modified code never leaves the workspace in an unrecoverable state.
+

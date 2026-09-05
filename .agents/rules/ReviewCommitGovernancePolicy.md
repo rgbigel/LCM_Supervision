@@ -6,12 +6,12 @@ globs: "*"
 # File: ReviewCommitGovernancePolicy.md
 
 Module: ReviewCommitGovernancePolicy  
-Purpose: Defines mandatory review-gated commit rules, review disposition handling, forced commit overrides, and audit logging.  
+Purpose: Defines mandatory review-gated commit rules, review disposition handling, forced commit overrides, audit logging, and dual-session directory junction reviews.  
 Path: .agents/rules/ReviewCommitGovernancePolicy.md  
 Authors: Rolf, Workspace_AI Governance  
-Version: 7.0.0  
+Version: 7.1.0  
 Status: Authoritative Policy  
-Date: 2026-08-29  
+Date: 2026-09-04  
 
 ---
 
@@ -63,5 +63,10 @@ Every review disposition (`Accepted`, `AcceptedWithEdits`, `Rejected`, `Deferred
    - Routine data accounting mutations within `Workspace_Inventory` (specifically `data/inventory.json`, `data/proposals/proposals.json`, `logs/cm_activity.log`, `docs/INVENTORY_DASHBOARD.md`, and `data/reviews/*`) occurring as a standard byproduct of reviews, audits, proposal lifecycle transitions, or push recording `SHALL NOT` increment `Workspace_Inventory`'s semantic version.
    - Semantic version increments for `Workspace_Inventory` apply strictly when source code (`tools/*.ps1`, `modules/*.psm1`), specifications (`docs/*.md`), or governance policies are modified.
 
-
-
+### RULE-REV-008: Dual-Session Beyond Compare Review for Reparse Points & Directory Junctions (.agents)
+1. **Mandatory Dual-Session Review**: Whenever `Invoke-BeyondCompareReview.ps1` (or `BCR`) is executed against any repository containing NTFS directory junctions (specifically `.agents` pointing to `.lcm\.agents`, or `.agents\rules` pointing to `.lcm\.agents\rules`), the review tool `MUST` automatically detect the junction and dispatch a second Beyond Compare review session.
+2. **Junction Session Layout**:
+   - **Left Pane (Baseline Snapshot)**: The extracted Git baseline directory corresponding to the junction (e.g. `<TempReviewRoot>\.agents` or `<TempReviewRoot>\.agents\rules`). If the directory does not exist in the baseline snapshot, the tool `MUST` initialize it.
+   - **Right Pane (Live Junction Target)**: The resolved live junction destination on disk (e.g. `D:\Git_Repositories\.lcm\.agents` or `D:\Git_Repositories\.lcm\.agents\rules`).
+3. **Session Persistence**: The second comparison `MUST` be registered in `BCSessions.xml` under `LCM_Review_<JunctionName>` and launched to Session 1 desktop via the interactive desktop dispatcher.
+4. **Staging & Review Directives**: All review actions (Accept, Edit, Delete, Defer) applied in the second session `MUST` be tracked and integrated into the review audit manifest (`staged_review_<Repo>.json`).

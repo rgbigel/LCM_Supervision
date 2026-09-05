@@ -1,4 +1,4 @@
-﻿---
+---
 name: SubsystemGovernancePolicy
 description: Authoritative governance policy for Disjunct Subsystems, Domain-Specific Inventories, JIT Ephemeral Authentication, and Host Safety Interlocks.
 globs: "*"
@@ -17,9 +17,9 @@ Date: 2026-08-29
 
 ## 1. Scope & Motivation
 
-A **Subsystem** represents an autonomous runtime domain (e.g., `HaSSD06` running Home Assistant OS) that is disjunct from the host PC's multi-boot Windows environment. 
+A **Subsystem** represents an autonomous runtime or supervisory domain (e.g., `HaSSD06` running Home Assistant OS, or `Workspace_Supervision` operating continuous task telemetry and status observation) that has specialized operational lifecycles distinct from general scripting utilities. 
 
-While Subsystems inherit standard LCM **documentation and quality gate rules**, their internal parts (integrations, devices, entities, add-ons) require domain-specific configuration management and elevated safety protocols.
+While Subsystems inherit standard LCM **documentation and quality gate rules**, their internal parts (integrations, devices, tasks, telemetry ledgers, entities) require domain-specific configuration management and elevated safety protocols.
 
 ---
 

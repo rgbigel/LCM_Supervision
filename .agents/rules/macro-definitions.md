@@ -1,4 +1,4 @@
-﻿---
+---
 name: macro-definitions
 description: Authoritative governance rule mirror for macro-definitions
 globs: "*"
@@ -9,7 +9,7 @@ globs: "*"
 <!-- Activation: Workspace Automatic                                       -->
 <!-- ===================================================================== -->
 # macro-definitions.md
-# version: 4.2.0
+# version: 4.3.0
 
 # MACRO-DEFINITIONS-METADATA
 # scope: durable-memory
@@ -82,3 +82,13 @@ MACRO: @ACCEPT
 - rules:
   - 'ACCEPT <repo>' or 'ACCEPT' -> executes 'pwsh -File tools/Submit-ReviewResult.ps1 -RepositoryPath <repo> -Result Accepted'
   - automatically closes matching Beyond Compare review window
+
+MACRO: @tsr
+- description: legacy timestamp header rule trigger (superseded by persistent TimestampHeaderRule per CRP-005)
+- aliases: @tsr, @THR, @TRH, @IRA
+- status: replaced / automated
+- rules:
+  - permanently codified in .agents/rules/InvariantRules.md
+  - automatically active on every turn across all sessions without requiring manual invocation
+  - format: YYYYMMDD_HHMM "<short-task-description>"
+

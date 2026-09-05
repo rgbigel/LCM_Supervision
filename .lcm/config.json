@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "repository_name": "Workspace_Supervision",
+  "classification": "subsystem",
+  "subsystem_type": "workspace-supervision-and-telemetry",
+  "component_version": "1.0.0",
+  "current_lcm_version": "7.1.1",
+  "absorbed_lcm_version": "7.1.1",
+  "execution_context": {
+    "elevation_required": false,
+    "minimum_privilege": "User",
+    "reason": "Workspace supervision, BLE observation, and telemetry polling operations."
+  },
+  "documentation": {
+    "tripartite_specifications": true,
+    "universal_installation_runbook": true
+  }
+}
