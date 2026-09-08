@@ -3,7 +3,8 @@
 - **Module**: `Workspace_Supervision`
 - **Domain**: `Workspace_Supervision`
 - **Authors**: Rolf, Workspace_AI Engine
-- **Version**: 1.0.0
+- **Version**: 1.0.1 (LCM Baseline: 7.3.2)
+- **Date**: 2026-09-08
 - **LCM Status**: Active
 
 ---

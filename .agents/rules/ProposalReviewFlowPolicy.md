@@ -9,9 +9,9 @@ Module: ProposalReviewFlowPolicy
 Purpose: Enforces ticket-first proposals, batch commands, Beyond Compare 5 review gates, granularity controls, and Workspace_Inventory dual-commit synchronization.  
 Path: .agents/rules/ProposalReviewFlowPolicy.md  
 Authors: Rolf, Workspace_AI Governance  
-Version: 7.3.0  
+Version: 7.3.1  
 Status: Authoritative Policy  
-Date: 2026-09-05  
+Date: 2026-09-08  
 
 ---
 
@@ -75,7 +75,8 @@ The review frequency is governed by `review_granularity` in `Workspace_Inventory
 
 ### RULE-LCM-009: Scope and Version-Explicit CRP Naming Standard
 1. **Canonical Filename Convention**: All Change Request Proposals (CRPs) `MUST` follow the standardized structure:
-   `CRP-YYYY-NNN-[Scope]-[Version]-[DescriptiveSlug].md`
+   `CRP-nnn-[Scope]-[Version]-[DescriptiveSlug].md`
+   - `nnn`: Universal monotonic sequence integer zero-padded to at least 3 digits (e.g. `018`, `119`), matching the proposal ledger `id` 1:1.
    - `[Scope]`: Affected repository/subsystem name (e.g. `Workspace_AI`, `Installation_LCD`, `SystemConfiguration`, `HaSSD06`), `LCM` for core governance, or `Multiple` for cross-cutting bundles.
    - `[Version]`: Target baseline or affected version horizon (e.g. `v7.0.0`, `v6.2.0`, `v1.0.0-v1.2.0`).
    - `[DescriptiveSlug]`: Kebab-case intent description.
@@ -90,10 +91,11 @@ The review frequency is governed by `review_granularity` in `Workspace_Inventory
 
 ### RULE-LCM-011: Scope and Version-Explicit Bug Report Naming Standard
 1. **Canonical Bug Filename Convention**: All formal Bug Reports `MUST` follow the standardized structure:
-   `BUG-YYYY-NNN-[Scope]-[Version]-[DescriptiveSlug].md`
+   `BUG-nnn-[Scope]-[Version]-[DescriptiveSlug].md`
    under `Workspace_Inventory/docs/Proposals/`.
+   - `nnn`: Universal monotonic sequence integer zero-padded to at least 3 digits (e.g. `024`, `092`), sharing the exact same sequence counter as CRPs and matching the proposal ledger `id` 1:1.
 2. **Mandatory Frontmatter Metadata**: Every Bug Report `MUST` include explicit frontmatter fields:
-   - `Bug-ID`: Sequential unique identifier (e.g. `BUG-2026-001`).
+   - `Bug-ID`: Sequential unique identifier sharing the sequence counter with CRPs (e.g. `BUG-024`, `BUG-092`).
    - `Scope`: Affected repository or subsystem boundary.
    - `Version`: Target release baseline (e.g. `v7.1.0`).
    - `Affected-Repos`: Array of modified repositories.
@@ -102,7 +104,7 @@ The review frequency is governed by `review_granularity` in `Workspace_Inventory
    - `Root-Cause`: Concise explanation of failure mechanics.
 
 ### RULE-LCM-012: Mandatory Scope-and-Version Explicit CRP Specification Generation Invariant
-1. **Mandatory Standalone Specification**: Whenever proposing, designing, or implementing new features, tools, workflows, architectural enhancements, or governance policies, the AI agent `MUST` author a formal, standalone Scope-and-Version Explicit Change Request Proposal specification (`CRP-YYYY-NNN-[Scope]-[Version]-[DescriptiveSlug].md`) in `Workspace_Inventory/docs/Proposals/` before or alongside ledger registration.
+1. **Mandatory Standalone Specification**: Whenever proposing, designing, or implementing new features, tools, workflows, architectural enhancements, or governance policies, the AI agent `MUST` author a formal, standalone Scope-and-Version Explicit Change Request Proposal specification (`CRP-nnn-[Scope]-[Version]-[DescriptiveSlug].md`) in `Workspace_Inventory/docs/Proposals/` before or alongside ledger registration.
 2. **Prohibition of Orphan Feature Proposals**: Proposing or executing features or tool modifications without an authoritative, permanent `CRP-*.md` specification file in `Workspace_Inventory/docs/Proposals/` is strictly prohibited. Every non-bug feature proposal in `proposals.json` `MUST` link to a valid `bundle_id` matching an existing CRP document.
 
 ### RULE-LCM-013: Mandatory Pre-Push Gemini AI & Knowledge Base Synchronization Invariant
