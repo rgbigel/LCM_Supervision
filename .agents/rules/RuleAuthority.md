@@ -1,4 +1,4 @@
-﻿---
+---
 name: RuleAuthority
 description: Authoritative governance hierarchy, single source of truth, and mandatory rule matrix synchronization policy.
 globs: "*"
@@ -18,8 +18,8 @@ Date: 2026-08-29
 ## 1. Governance Authority Invariants
 
 ### `RULE-AUTH-001` (Single Source of Truth & Zero Rule Forking)
-- **Canonical Hub**: `D:\Git_Repositories\.agents\rules\` is the single, authoritative canonical root for all LCM governance rules.
-- **Child Repositories**: All governed child repositories `MUST` link their local `.agents\rules` directory to the canonical hub via NTFS junction (`mklink /J`).
+- **Canonical Physical Hub**: `Workspace_Inventory\.agents\rules\` is the single, authoritative physical host and primary commit gate for all LCM governance rules.
+- **Root & Child Discovery**: The root workspace container links `D:\Git_Repositories\.agents\rules\` (via `.lcm\.agents\rules`) directly to `Workspace_Inventory\.agents\rules\` via NTFS directory junction (`mklink /J`), avoiding rule commit churn on the root container. All governed child repositories link their local `.agents\rules` directory to this canonical hub.
 - **No Independent Truth**: Child repositories and IDE adapter surfaces `MUST NOT` fork, maintain conflicting local copies, or override core governance policies without an approved Change Request.
 
 ---

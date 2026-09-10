@@ -6,6 +6,21 @@
   Executes specific or all active supervision tasks, captures structured observation metrics,
   updates 'data/supervision_catalog.json', and appends records to 'data/supervision_history.jsonl'.
 
+.PARAMETER TaskId
+  Target supervision task identifier.
+
+.PARAMETER TaskName
+  Target supervision task ShortName.
+
+.PARAMETER All
+  Executes all active supervision tasks.
+
+.PARAMETER WorkspaceRoot
+  Root directory of the LCM multi-repository workspace.
+
+.PARAMETER Help
+  Displays this synopsis and usage screen.
+
 .EXAMPLE
   pwsh -File tools/Invoke-SupervisionRunner.ps1 -TaskId ble-fleet-stability
   pwsh -File tools/Invoke-SupervisionRunner.ps1 -TaskName BleSupervision
@@ -13,18 +28,37 @@
 #>
 [CmdletBinding()]
 param(
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory = $false, HelpMessage = 'Target supervision task identifier.')]
   [string]$TaskId,
 
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory = $false, HelpMessage = 'Target supervision task ShortName.')]
   [string]$TaskName,
 
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory = $false, HelpMessage = 'Executes all active supervision tasks.')]
   [switch]$All,
 
-  [Parameter(Mandatory = $false)]
-  [string]$WorkspaceRoot = 'D:\Git_Repositories'
+  [Parameter(Mandatory = $false, HelpMessage = 'Root directory of the LCM multi-repository workspace.')]
+  [string]$WorkspaceRoot = 'D:\Git_Repositories',
+
+  [Parameter(Mandatory = $false, HelpMessage = 'Displays this synopsis and usage screen.')]
+  [Alias('h', '?')]
+  [switch]$Help
 )
+
+if ($Help) {
+  Write-Host "Invoke-SupervisionRunner.ps1 - Unified task dispatcher and telemetry recorder for Workspace Supervision." -ForegroundColor Cyan
+  Write-Host ""
+  Write-Host "Usage:"
+  Write-Host "  pwsh -File Invoke-SupervisionRunner.ps1 [-TaskId <id>] [-TaskName <name>] [-All] [-WorkspaceRoot <path>] [-Help]"
+  Write-Host ""
+  Write-Host "Parameters:"
+  Write-Host "  -TaskId        Target supervision task identifier."
+  Write-Host "  -TaskName      Target supervision task ShortName."
+  Write-Host "  -All           Executes all active supervision tasks."
+  Write-Host "  -WorkspaceRoot Root directory of the LCM workspace (default: D:\Git_Repositories)."
+  Write-Host "  -Help (-h, -?) Displays this help message."
+  exit 0
+}
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'

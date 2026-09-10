@@ -20,6 +20,12 @@
 .PARAMETER TaskJson
   JSON payload or file path when adding or modifying a task.
 
+.PARAMETER WorkspaceRoot
+  Root directory of the LCM multi-repository workspace.
+
+.PARAMETER Help
+  Displays this synopsis and usage screen.
+
 .EXAMPLE
   pwsh -File tools/Manage-SupervisionTask.ps1 -Action Get
   pwsh -File tools/Manage-SupervisionTask.ps1 -Action RunNow -TaskName BleSupervision
@@ -29,22 +35,23 @@
 #>
 [CmdletBinding()]
 param(
-  [Parameter(Mandatory = $false, Position = 0)]
+  [Parameter(Mandatory = $false, Position = 0, HelpMessage = 'Action to perform: Get, Show, List, Start, Stop, Pause, Resume, RunNow, Run, Add, Delete, Remove, Modify, Update.')]
   [ValidateSet('Get', 'Show', 'List', 'Start', 'Stop', 'Pause', 'Resume', 'RunNow', 'Run', 'Add', 'Delete', 'Remove', 'Modify', 'Update')]
   [string]$Action = 'Get',
 
-  [Parameter(Mandatory = $false, Position = 1)]
+  [Parameter(Mandatory = $false, Position = 1, HelpMessage = 'Target task ShortName or ID, or All for bulk actions.')]
   [string]$TaskName = 'All',
 
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory = $false, HelpMessage = 'New interval in minutes when modifying a task.')]
   [int]$IntervalMinutes,
 
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory = $false, HelpMessage = 'JSON payload or file path when adding or modifying a task.')]
   [string]$TaskJson,
 
-  [Parameter(Mandatory = $false)]
+  [Parameter(Mandatory = $false, HelpMessage = 'Root directory of the LCM multi-repository workspace.')]
   [string]$WorkspaceRoot = 'D:\Git_Repositories',
 
+  [Parameter(Mandatory = $false, HelpMessage = 'Displays this synopsis and usage screen.')]
   [Alias('h', '?')]
   [switch]$Help
 )
