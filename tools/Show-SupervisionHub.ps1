@@ -29,11 +29,24 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$scriptVersion = "1.1.0"
+$scriptVersion = "1.1.1"
 $supervisionRoot = Split-Path $PSScriptRoot -Parent
 $catalogFile = Join-Path $supervisionRoot 'data\supervision_catalog.json'
 $historyFile = Join-Path $supervisionRoot 'data\supervision_history.jsonl'
-$htmlFile = Join-Path $supervisionRoot 'docs\SUPERVISION_HUB.html'
+$templateFile = Join-Path $supervisionRoot 'assets\SUPERVISION_HUB.html'
+if (-not (Test-Path -LiteralPath $templateFile)) {
+  $templateFile = Join-Path $supervisionRoot 'docs\SUPERVISION_HUB.html'
+}
+
+$artifactsDir = Join-Path $supervisionRoot 'data\artifacts'
+if (-not (Test-Path -LiteralPath $artifactsDir)) {
+  New-Item -ItemType Directory -Path $artifactsDir -Force | Out-Null
+}
+$scratchDir = Join-Path $supervisionRoot 'scratch'
+if (-not (Test-Path -LiteralPath $scratchDir)) {
+  New-Item -ItemType Directory -Path $scratchDir -Force | Out-Null
+}
+$htmlFile = Join-Path $artifactsDir 'SUPERVISION_HUB.html'
 
 if ($Help) {
   Write-Host "==========================================================================" -ForegroundColor Cyan
@@ -47,8 +60,8 @@ if (-not (Test-Path -LiteralPath $catalogFile)) {
   throw "Supervision catalog file missing at: $catalogFile"
 }
 
-if (-not (Test-Path -LiteralPath $htmlFile)) {
-  throw "Supervision HTML dashboard missing at: $htmlFile"
+if (-not (Test-Path -LiteralPath $templateFile)) {
+  throw "Supervision HTML dashboard template missing at: $templateFile"
 }
 
 # Read live catalog data
@@ -69,8 +82,8 @@ if (Test-Path -LiteralPath $historyFile) {
 }
 $historyRaw = ($historyItems | ConvertTo-Json -Depth 6 -Compress)
 
-# Inject updated catalog & history data into HTML file
-$htmlContent = Get-Content -LiteralPath $htmlFile -Raw -Encoding utf8
+# Inject updated catalog & history data into HTML template
+$htmlContent = Get-Content -LiteralPath $templateFile -Raw -Encoding utf8
 
 $injectedCatalog = "let catalogData = $catalogRaw;"
 $injectedHistory = "let observationHistoryData = $historyRaw;"
@@ -79,6 +92,7 @@ $htmlContent = $htmlContent -replace 'let catalogData = \{[\s\S]*?\};', $injecte
 $htmlContent = $htmlContent -replace 'let observationHistoryData = \[[\s\S]*?\];', $injectedHistory
 
 [System.IO.File]::WriteAllText($htmlFile, $htmlContent, [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText((Join-Path $scratchDir 'SUPERVISION_HUB.html'), $htmlContent, [System.Text.UTF8Encoding]::new($false))
 
 Write-Host "✓ Synchronized Supervision Hub cache & observations: $htmlFile" -ForegroundColor Green
 

@@ -1,0 +1,14 @@
+
+# Logs & Temporary Files
+logs/
+scratch/
+*.log
+*.tmp
+*.bak
+
+# Local Runtime Artifacts
+data/artifacts/
+data/readiness/
+
+# LCM Local Governance Link
+.agents/
