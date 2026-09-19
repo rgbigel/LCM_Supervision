@@ -1,10 +1,12 @@
 # Implementation Specification: Workspace Supervision Engine
 
-- **Module**: `Workspace_Supervision`
-- **Domain**: `Workspace_Supervision`
-- **Authors**: Rolf, Workspace_AI Engine
-- **Version**: 1.0.0
-- **LCM Status**: Active
+Module: docs/Implementation.md  
+Purpose: Code catalog, task controller parameters, runner dispatch logic, and telemetry persistence schemas for Workspace_Supervision.  
+Path: D:/Git_Repositories/Workspace_Supervision/docs/Implementation.md  
+Authors: Rolf, Workspace_AI Engine  
+Version: 1.1.1 (LCM Baseline: 7.0.0)  
+Status: Authoritative Implementation  
+Date: 2026-09-19  
 
 ---
 
@@ -29,7 +31,7 @@ Unified runner executing tasks based on runner type:
 - `batch`: Executes command script via `cmd.exe`.
 Parses output JSON, updates `data/supervision_catalog.json` with latest status/counters, and appends raw cycle telemetry to `data/supervision_history.jsonl`.
 
-### 3. `docs/SUPERVISION_HUB.html`
+### 3. `assets/templates/SUPERVISION_HUB_TEMPLATE.html` / `data/artifacts/SUPERVISION_HUB.html`
 Single-page application rendered with Vanilla CSS and JS, supporting:
 - Multi-column sorting
 - Search negation (`!term`)
