@@ -4,7 +4,7 @@
   "classification": "subsystem",
   "subsystem_type": "workspace-supervision-and-telemetry",
   "component_version": "1.0.0",
-  "current_lcm_version": "7.0.0",
+  "current_lcm_version": "8.0.0",
   "execution_context": {
     "elevation_required": false,
     "minimum_privilege": "User",
@@ -14,5 +14,5 @@
     "tripartite_specifications": true,
     "universal_installation_runbook": true
   },
-  "absorbed_lcm_version": "7.0.0"
+  "absorbed_lcm_version": "8.0.0"
 }

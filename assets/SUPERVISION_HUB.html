@@ -542,7 +542,7 @@
       <button class="btn btn-purple" onclick="openObsModal()" title="View and inspect all recorded status observation events">📊 View Status Observations</button>
       <button class="btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Light/Dark Theme">🌓 Theme</button>
       <button class="btn btn-primary" onclick="openAddModal()">➕ Add Task</button>
-      <a href="../../Workspace_Inventory/docs/CM_CONTROL_HUB.html" class="btn btn-back" title="Return to LCM CM Control Hub">⬅ Back to CM Hub</a>
+      <a href="../../../Workspace_Inventory/data/artifacts/CM_CONTROL_HUB.html" class="btn btn-back" title="Return to LCM CM Control Hub">⬅ Back to CM Hub</a>
     </div>
   </header>
 
@@ -927,6 +927,8 @@
     let sortAsc = true;
 
     function init() {
+      const saved = localStorage.getItem('lcm_theme') || localStorage.getItem('lcm_supervision_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
       populateHeaderDropdowns();
       populateObsTaskDropdown();
       renderTable();
@@ -934,9 +936,10 @@
     }
 
     function toggleTheme() {
-      const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+      const cur = document.documentElement.getAttribute('data-theme') || 'light';
       const nxt = cur === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', nxt);
+      localStorage.setItem('lcm_theme', nxt);
       localStorage.setItem('lcm_supervision_theme', nxt);
     }
 
