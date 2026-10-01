@@ -1,4 +1,4 @@
-# Pester v5 Test Suite: Workspace_Supervision Engine
+# Pester v5 Test Suite: LCM_Supervision Engine
 BeforeAll {
   $supervisionRoot = Split-Path $PSScriptRoot -Parent
   $catalogFile = Join-Path $supervisionRoot 'data\supervision_catalog.json'

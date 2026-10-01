@@ -1,11 +1,11 @@
-# Workspace_Supervision
+# LCM_Supervision
 
 Generalized Fleet Stability, Hardware Invariants, and Subsystem Health Supervision Hub for the Lifecycle Model (LCM) architecture.
 
 ---
 
 ## 1. Overview & Purpose
-`Workspace_Supervision` provides an extensible, multi-task supervisory framework to orchestrate, execute, audit, and visualize long-running and periodic diagnostic supervision tasks across the entire workspace infrastructure.
+`LCM_Supervision` provides an extensible, multi-task supervisory framework to orchestrate, execute, audit, and visualize long-running and periodic diagnostic supervision tasks across the entire workspace infrastructure.
 
 ### Core Capabilities:
 1. **Multi-Task Registry**: Standardized JSON manifests (`data/supervision_catalog.json`) supporting Python, PowerShell, and Batch runners.
@@ -43,7 +43,7 @@ pwsh -File tools/Manage-SupervisionTask.ps1 -Action Start -TaskName All
 
 ## 3. Directory Structure
 ```
-Workspace_Supervision/
+LCM_Supervision/
 ├── docs/
 │   ├── Architecture.md           # Supervisory model & lifecycle states
 │   ├── Requirements.md           # Functional & non-functional requirements

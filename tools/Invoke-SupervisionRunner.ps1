@@ -63,7 +63,7 @@ if ($Help) {
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$supervisionRoot = Join-Path $WorkspaceRoot 'Workspace_Supervision'
+$supervisionRoot = Join-Path $WorkspaceRoot 'LCM_Supervision'
 $catalogFile = Join-Path $supervisionRoot 'data\supervision_catalog.json'
 $historyFile = Join-Path $supervisionRoot 'data\supervision_history.jsonl'
 

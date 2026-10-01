@@ -1,9 +1,9 @@
 # Architecture Specification: Workspace Supervision Engine
 
 Module: docs/Architecture.md  
-Purpose: Authoritative architectural specification for the Workspace_Supervision background monitoring, BLE telemetry observation, and task scheduler engine.  
-Path: D:/Git_Repositories/Workspace_Supervision/docs/Architecture.md  
-Authors: Rolf, Workspace_AI Engine  
+Purpose: Authoritative architectural specification for the LCM_Supervision background monitoring, BLE telemetry observation, and task scheduler engine.  
+Path: D:/Git_Repositories/LCM_Supervision/docs/Architecture.md  
+Authors: Rolf, LCM_AI Engine  
 Version: 1.1.1 (LCM Baseline: 7.0.0)  
 Status: Authoritative Architecture  
 Date: 2026-09-19  

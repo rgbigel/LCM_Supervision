@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "repository_name": "Workspace_Supervision",
+  "repository_name": "LCM_Supervision",
   "classification": "subsystem",
   "subsystem_type": "workspace-supervision-and-telemetry",
   "component_version": "1.0.0",

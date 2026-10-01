@@ -1,9 +1,9 @@
 # Implementation Specification: Workspace Supervision Engine
 
 Module: docs/Implementation.md  
-Purpose: Code catalog, task controller parameters, runner dispatch logic, and telemetry persistence schemas for Workspace_Supervision.  
-Path: D:/Git_Repositories/Workspace_Supervision/docs/Implementation.md  
-Authors: Rolf, Workspace_AI Engine  
+Purpose: Code catalog, task controller parameters, runner dispatch logic, and telemetry persistence schemas for LCM_Supervision.  
+Path: D:/Git_Repositories/LCM_Supervision/docs/Implementation.md  
+Authors: Rolf, LCM_AI Engine  
 Version: 1.1.1 (LCM Baseline: 7.0.0)  
 Status: Authoritative Implementation  
 Date: 2026-09-19  

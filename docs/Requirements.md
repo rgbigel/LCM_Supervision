@@ -1,9 +1,9 @@
 # Requirements Specification: Workspace Supervision Engine
 
 Module: docs/Requirements.md  
-Purpose: Normative requirements, task lifecycle states, and telemetry data models for Workspace_Supervision.  
-Path: D:/Git_Repositories/Workspace_Supervision/docs/Requirements.md  
-Authors: Rolf, Workspace_AI Engine  
+Purpose: Normative requirements, task lifecycle states, and telemetry data models for LCM_Supervision.  
+Path: D:/Git_Repositories/LCM_Supervision/docs/Requirements.md  
+Authors: Rolf, LCM_AI Engine  
 Version: 1.1.1 (LCM Baseline: 7.0.0)  
 Status: Authoritative Requirements  
 Date: 2026-09-19  
