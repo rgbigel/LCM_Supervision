@@ -9,9 +9,9 @@ Generalized Fleet Stability, Hardware Invariants, and Subsystem Health Supervisi
 
 ### Core Capabilities:
 1. **Multi-Task Registry**: Standardized JSON manifests (`data/supervision_catalog.json`) supporting Python, PowerShell, and Batch runners.
-2. **Unified CM Lifecycle Control**: Start, Stop, Pause, Resume, and Execute (`RunNow`) tasks individually or in bulk via [`Manage-SupervisionTask.ps1`](file:///tools/Manage-SupervisionTask.ps1).
+2. **Unified CM Lifecycle Control**: Start, Stop, Pause, Resume, and Execute (`RunNow`) tasks individually or in bulk via [`Manage-SupervisionTask.ps1`](tools/Manage-SupervisionTask.ps1).
 3. **Resilient Scheduling**: Dual-layer execution combining OS-level Windows Scheduled Tasks (power-down and sleep resilient) with IDE-level standing daemon crons.
-4. **Universal Interactive Supervision Hub**: Browser-based single-page application ([`SUPERVISION_HUB.html`](file:///docs/SUPERVISION_HUB.html)) featuring sorting, negation search (`!term`), metric cards, batch actions, and observation counters.
+4. **Universal Interactive Supervision Hub**: Browser-based single-page application rendered by the supervision launcher, featuring sorting, negation search (`!term`), metric cards, batch actions, and observation counters.
 
 ---
 
@@ -19,7 +19,7 @@ Generalized Fleet Stability, Hardware Invariants, and Subsystem Health Supervisi
 
 ### Launch Interactive Supervision Hub:
 ```powershell
-pwsh -File tools/Show-SupervisionHub.ps1
+pwsh -File tools/Show-Supervision.ps1
 ```
 
 ### Manage Tasks via CLI:
@@ -52,7 +52,7 @@ LCM_Supervision/
 ├── tools/
 │   ├── Manage-SupervisionTask.ps1 # CM task controller (Start/Stop/Pause/Add/Modify)
 │   ├── Invoke-SupervisionRunner.ps1 # Unified task dispatcher
-│   └── Show-SupervisionHub.ps1   # Browser UI launcher
+│   └── Show-Supervision.ps1      # Browser UI launcher
 ├── tasks/
 │   ├── bluetooth/
 │   │   ├── BleSupervisionTask.py # 51-entity BLE fleet monitor
@@ -65,3 +65,9 @@ LCM_Supervision/
 └── tests/
     └── SupervisionEngine.Tests.ps1 # Pester v5 test suite
 ```
+
+## 4. Specifications
+
+- [Architecture](docs/Architecture.md)
+- [Requirements](docs/Requirements.md)
+- [Implementation](docs/Implementation.md)
