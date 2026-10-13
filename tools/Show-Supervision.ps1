@@ -29,7 +29,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$scriptVersion = "1.1.1"
+$scriptVersion = "10.0.0"
 $supervisionRoot = Split-Path $PSScriptRoot -Parent
 $catalogFile = Join-Path $supervisionRoot 'data\supervision_catalog.json'
 $historyFile = Join-Path $supervisionRoot 'data\supervision_history.jsonl'

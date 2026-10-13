@@ -59,7 +59,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$scriptVersion = "1.0.0"
+$scriptVersion = "10.0.0"
 $supervisionRoot = Join-Path $WorkspaceRoot 'LCM_Supervision'
 $catalogFile = Join-Path $supervisionRoot 'data\supervision_catalog.json'
 

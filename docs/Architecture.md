@@ -4,9 +4,9 @@ Module: docs/Architecture.md
 Purpose: Authoritative architectural specification for the LCM_Supervision background monitoring, BLE telemetry observation, and task scheduler engine.  
 Path: D:/Git_Repositories/LCM_Supervision/docs/Architecture.md  
 Authors: Rolf, LCM_AI Engine  
-Version: 1.1.1 (LCM Baseline: 7.0.0)  
+Version: 10.0.0 (LCM Baseline: 10.0.0)
 Status: Authoritative Architecture  
-Date: 2026-09-19  
+Date: 2026-10-13
 
 ---
 
