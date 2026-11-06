@@ -1,5 +1,5 @@
 """
-Module: Workspace_Supervision/tasks/bluetooth/BleSupervisionTask.py
+Module: LCM_Supervision/tasks/bluetooth/BleSupervisionTask.py
 Purpose: Standardized 51-Entity Bluetooth LE Fleet Stability Supervision Task.
          Checks for rapid micro-oscillations, packet collisions, and temporary dropouts.
 """
