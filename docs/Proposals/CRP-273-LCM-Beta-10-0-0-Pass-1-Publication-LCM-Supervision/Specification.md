@@ -1,6 +1,6 @@
-# Change Request Proposal: CRP-273
+﻿# Change Request Proposal: CRP-273
 
-`yaml
+```yaml
 CRP-ID: CRP-273
 Title: LCM Beta 10.0.0 Pass 1 Publication - LCM_Supervision
 Scope: LCM_Supervision
@@ -12,7 +12,7 @@ Plan-State: suggested
 Progress-State: undecided
 Priority: High
 App-ID: None
-`
+```
 
 ---
 
