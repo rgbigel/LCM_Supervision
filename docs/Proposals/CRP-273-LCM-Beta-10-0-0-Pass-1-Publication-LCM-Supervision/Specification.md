@@ -1,4 +1,4 @@
-﻿# Change Request Proposal: CRP-273
+# Change Request Proposal: CRP-273
 
 ```yaml
 CRP-ID: CRP-273
