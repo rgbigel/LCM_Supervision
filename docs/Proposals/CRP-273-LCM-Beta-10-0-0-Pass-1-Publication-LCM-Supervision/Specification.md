@@ -4,7 +4,7 @@
 CRP-ID: CRP-273
 Title: LCM Beta 10.0.0 Pass 1 Publication - LCM_Supervision
 Scope: LCM_Supervision
-Baseline-Version: 10.0.0
+Baseline-Version: 10.2.0
 Author: Copilot
 Date: 2026-10-13 19:26:18
 Status: Suggested
