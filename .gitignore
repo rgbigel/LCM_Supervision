@@ -2,6 +2,8 @@
 # Logs & Temporary Files
 logs/
 scratch/
+docs/Proposals/
+DoT/
 *.log
 *.tmp
 *.bak
