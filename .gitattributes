@@ -1,0 +1,17 @@
+# LCM Workspace Line Ending Governance per INVARIANT-RULES
+* text=auto eol=crlf
+* whitespace=-trailing-space,cr-at-eol
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+*.psd1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.json text eol=crlf
+*.md text eol=crlf whitespace=-trailing-space,cr-at-eol
+*.py text eol=crlf
+*.html text eol=crlf
+*.css text eol=crlf
+*.js text eol=crlf
+*.png binary
+*.jpg binary
+*.ico binary
