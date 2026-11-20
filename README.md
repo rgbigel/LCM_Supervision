@@ -1,5 +1,12 @@
 # LCM_Supervision
 
+Module: README.md  
+Purpose: Executive summary and index of LCM_Supervision, the supervision hub of the LCM architecture.  
+Path: LCM_Supervision/README.md  
+Authors: Rolf, Claude  
+Version: 10.8.4  
+Date: 2026-11-20
+
 Generalized Fleet Stability, Hardware Invariants, and Subsystem Health Supervision Hub for the Lifecycle Model (LCM) architecture.
 
 ---
