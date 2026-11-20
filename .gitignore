@@ -14,3 +14,5 @@ data/readiness/
 
 # LCM Local Governance Link
 .agents/
+# Python byte-code caches (BUG-377)
+__pycache__/
